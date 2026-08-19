@@ -5,6 +5,7 @@ import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
 import 'package:weather_app/features/auth/views/widgets/phone_field.dart';
+import 'package:weather_app/features/weather/views/main_layout_screen.dart';
 
 class CreateAccount extends StatelessWidget {
   CreateAccount({super.key});
@@ -127,7 +128,13 @@ class CreateAccount extends StatelessWidget {
                   SizedBox(height: 32.h),
                   CustomElevatedButton(
                     content: Text("Register"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MainLayoutScreen(),
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 24.h),
                   Row(

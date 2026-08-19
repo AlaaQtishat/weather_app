@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTheme {
+  static final Color lightSelected = Color(0xFF2D3561);
+  static final Color lightUnselected = Color(0xFFB5BBC9);
   static final Color primaryBlue = Color(0xFF2A6AE8);
   static final RadialGradient scaffoldGradient = RadialGradient(
     center: Alignment.topRight,
