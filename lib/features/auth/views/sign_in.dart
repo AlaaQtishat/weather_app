@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
+import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
+import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/create_account.dart';
 import 'package:weather_app/features/auth/views/forget_password.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
+import 'package:weather_app/features/weather/views/main_layout_screen.dart';
 
 class SignIn extends StatefulWidget {
   SignIn({super.key});
@@ -16,6 +20,15 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool isRememberMeChecked = false;
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordcontroller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,193 +44,275 @@ class _SignInState extends State<SignIn> {
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 120.h),
-                  Text(
-                    "Sign in to your\naccount",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40.sp,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 120.h),
+                    Text(
+                      "Sign in to your\naccount",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40.sp,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    "Enter your email and password to log in ",
-                    style: TextStyle(color: Colors.black54),
-                  ),
-                  SizedBox(height: 32.h),
-                  CustomTextField(
-                    controller: emailController,
-                    hint: "Email",
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  SizedBox(height: 8.h),
-                  CustomTextField(
-                    hint: "Password",
-                    isPassword: true,
-                    controller: passwordcontroller,
-                  ),
-                  SizedBox(height: 12.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(width: 12.w),
-                          SizedBox(
-                            width: 24.w,
-                            height: 24.h,
-                            child: Checkbox(
-                              activeColor: AppTheme.primaryBlue,
+                    SizedBox(height: 12.h),
+                    Text(
+                      "Enter your email and password to log in ",
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                    SizedBox(height: 32.h),
+                    CustomTextField(
+                      controller: emailController,
+                      hint: "Email",
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Email is required";
+                        }
 
-                              value: false,
-                              //isRememberMeChecked,
-                              //activeColor: Colors.green,
-                              side: BorderSide(
-                                width: 2.w,
-                                color: Colors.black45,
+                        if (!RegExp(
+                          r"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+$",
+                        ).hasMatch(val)) {
+                          return "Please enter a valid email address";
+                        }
+
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: 8.h),
+                    CustomTextField(
+                      hint: "Password",
+                      isPassword: true,
+                      controller: passwordcontroller,
+                      validator: (val) {
+                        if (val == null || val.isEmpty)
+                          return "Password is required";
+
+                        if (val.length < 8) {
+                          return "Password must be at least 8 characters";
+                        }
+
+                        if (!RegExp(r'[A-Z]').hasMatch(val)) {
+                          return "Must contain at least one uppercase letter";
+                        }
+
+                        if (!RegExp(r'[a-z]').hasMatch(val)) {
+                          return "Must contain at least one lowercase letter";
+                        }
+
+                        if (!RegExp(r'[0-9]').hasMatch(val)) {
+                          return "Must contain at least one number";
+                        }
+
+                        if (!RegExp(r'[!@#\$&*~_=%^]+').hasMatch(val)) {
+                          return "Must contain at least one special character";
+                        }
+
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(width: 12.w),
+                            SizedBox(
+                              width: 24.w,
+                              height: 24.h,
+                              child: Checkbox(
+                                activeColor: AppTheme.primaryBlue,
+
+                                value: isRememberMeChecked,
+
+                                side: BorderSide(
+                                  width: 2.w,
+                                  color: Colors.black45,
+                                ),
+                                onChanged: (val) {
+                                  setState(() {
+                                    isRememberMeChecked = val!;
+                                  });
+                                },
                               ),
-                              onChanged: (val) {
-                                setState(() {
-                                  //  isRememberMeChecked = val!;
-                                });
-                              },
+                            ),
+                            SizedBox(width: 12.w),
+                            Text(
+                              "Remember me",
+                              style: TextStyle(
+                                color: Colors.black45,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ForgetPassword(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Forget Password?",
+                            style: TextStyle(color: AppTheme.primaryBlue),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.h),
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (ModalRoute.of(context)?.isCurrent != true) return;
+                        if (state is AuthSuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Signed in Successfully!"),
+                            ),
+                          );
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainLayoutScreen(),
+                            ),
+                          );
+                        } else if (state is AuthError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.errorMessage)),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return CustomElevatedButton(
+                          content: state is AuthLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text("Log In"),
+                          onPressed: () {
+                            if (state is AuthLoading) {
+                              return;
+                            }
+
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthCubit>().signinCubit(
+                                email: emailController.text,
+                                password: passwordcontroller.text,
+                                isRememberMe: isRememberMeChecked,
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 16.h),
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: Colors.grey.shade400)),
+                        SizedBox(width: 12.w),
+                        Text("Or", style: TextStyle(color: Colors.black45)),
+                        SizedBox(width: 12.w),
+                        Expanded(child: Divider(color: Colors.grey.shade500)),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+                    CustomElevatedButton(
+                      backgroundColor: Colors.white,
+                      textColor: Colors.black,
+                      content: Row(
+                        children: [
+                          SizedBox(width: 32.w),
+                          SizedBox(
+                            width: 40.w,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                "assets/images/google.png",
+                                height: 28.h,
+                                width: 28.w,
+                              ),
                             ),
                           ),
-                          SizedBox(width: 12.w),
-                          Text(
-                            "Remember me",
-                            style: TextStyle(
-                              color: Colors.black45,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.sp,
+
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Text(
+                              "Continue with Google",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.start,
                             ),
                           ),
                         ],
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ForgetPassword(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Forget Password?",
-                          style: TextStyle(color: AppTheme.primaryBlue),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
-                  CustomElevatedButton(
-                    content: Text("Log In"),
-                    onPressed: () {},
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    children: [
-                      Expanded(child: Divider(color: Colors.grey.shade400)),
-                      SizedBox(width: 12.w),
-                      Text("Or", style: TextStyle(color: Colors.black45)),
-                      SizedBox(width: 12.w),
-                      Expanded(child: Divider(color: Colors.grey.shade500)),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                  CustomElevatedButton(
-                    backgroundColor: Colors.white,
-                    textColor: Colors.black,
-                    content: Row(
-                      children: [
-                        SizedBox(width: 32.w),
-                        SizedBox(
-                          width: 40.w,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Image.asset(
-                              "assets/images/google.png",
-                              height: 28.h,
-                              width: 28.w,
+                      onPressed: () {},
+                    ),
+                    SizedBox(height: 8.h),
+
+                    CustomElevatedButton(
+                      backgroundColor: Colors.white,
+                      textColor: Colors.black,
+                      content: Row(
+                        children: [
+                          SizedBox(width: 32.w),
+
+                          SizedBox(
+                            width: 40.w,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                "assets/images/facebook.png",
+                                height: 28.h,
+                                width: 28.w,
+                              ),
                             ),
                           ),
-                        ),
 
-                        SizedBox(width: 10.w),
-                        Expanded(
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Text(
+                              "Continue with Facebook",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                        ],
+                      ),
+                      onPressed: () {},
+                    ),
+                    SizedBox(height: 16.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            color: Colors.black45,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => CreateAccount(),
+                              ),
+                            );
+                          },
                           child: Text(
-                            "Continue with Google",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.start,
+                            "Sign Up",
+                            style: TextStyle(color: AppTheme.primaryBlue),
                           ),
                         ),
                       ],
                     ),
-                    onPressed: () {},
-                  ),
-                  SizedBox(height: 8.h),
-
-                  CustomElevatedButton(
-                    backgroundColor: Colors.white,
-                    textColor: Colors.black,
-                    content: Row(
-                      children: [
-                        SizedBox(width: 32.w),
-
-                        SizedBox(
-                          width: 40.w,
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Image.asset(
-                              "assets/images/facebook.png",
-                              height: 28.h,
-                              width: 28.w,
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          child: Text(
-                            "Continue with Facebook",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onPressed: () {},
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account?",
-                        style: TextStyle(
-                          color: Colors.black45,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => CreateAccount(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(color: AppTheme.primaryBlue),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

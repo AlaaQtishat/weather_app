@@ -6,11 +6,14 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final bool isCalender;
   final bool isPhoneNumber;
+  final String? Function(String?) validator;
   final TextInputType keyboardType;
   final TextEditingController controller;
   final String hint;
+
   VoidCallback? onTap;
   CustomTextField({
+    required this.validator,
     super.key,
     required this.hint,
     this.isPassword = false,
@@ -31,7 +34,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
       readOnly: widget.isCalender ? true : false,
       onTap: widget.onTap,
@@ -55,6 +58,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
           borderSide: BorderSide(width: 1, color: AppTheme.primaryBlue),
           borderRadius: BorderRadius.circular(12.r),
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Colors.red.shade100),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Colors.red.shade900),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(
@@ -71,13 +82,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 },
               )
             : widget.isCalender
-            ? IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.calendar_today_outlined,
-                  color: Colors.grey,
-                  size: 24.sp,
-                ),
+            ? Icon(
+                Icons.calendar_today_outlined,
+                color: Colors.grey,
+                size: 24.sp,
               )
             : null,
         prefixIcon: widget.isPhoneNumber
@@ -86,6 +94,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       ),
       obscureText: widget.isPassword ? _obscureText : false,
       keyboardType: widget.keyboardType,
+      validator: widget.validator,
     );
   }
 }

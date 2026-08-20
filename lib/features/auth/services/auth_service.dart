@@ -17,7 +17,6 @@ class AuthService {
 
     if (userCredential.user != null) {
       String uid = userCredential.user!.uid;
-
       await userCredential.user!.updateDisplayName(
         "${user.fname} ${user.lname}",
       );

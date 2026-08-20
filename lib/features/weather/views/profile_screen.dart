@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
+import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
+import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/weather/widgets/letter_widget.dart';
 import 'package:weather_app/features/weather/widgets/notification_item_widget.dart';
 import 'package:weather_app/features/weather/widgets/preference_item_widget.dart';
@@ -130,29 +134,59 @@ class ProfileScreen extends StatelessWidget {
 
                 SizedBox(height: 32.h),
 
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 18.h),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFCECEE),
-                      borderRadius: BorderRadius.circular(24.r),
-                      border: Border.all(
-                        color: const Color(0xFFF5D6DA),
-                        width: 1.w,
+                BlocConsumer<AuthCubit, AuthState>(
+                  listener: (context, state) {
+                    if (ModalRoute.of(context)?.isCurrent != true) return;
+                    if (state is AuthSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("signed out successfully!"),
+                        ),
+                      );
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => SignIn()),
+                      );
+                    } else if (state is AuthError) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.errorMessage)),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (state is AuthLoading) {
+                          return;
+                        }
+                        context.read<AuthCubit>().logoutCubit();
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 18.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFCECEE),
+                          borderRadius: BorderRadius.circular(24.r),
+                          border: Border.all(
+                            color: const Color(0xFFF5D6DA),
+                            width: 1.w,
+                          ),
+                        ),
+                        alignment: Alignment.center,
+                        child: state is AuthLoading
+                            ? CircularProgressIndicator()
+                            : Text(
+                                "Sign Out",
+                                style: TextStyle(
+                                  color: const Color(0xFFE57373),
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                       ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Sign Out",
-                      style: TextStyle(
-                        color: const Color(0xFFE57373),
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
 
                 SizedBox(height: 80.h),
