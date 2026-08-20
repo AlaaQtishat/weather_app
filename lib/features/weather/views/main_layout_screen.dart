@@ -25,6 +25,8 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.transparent,
@@ -35,8 +37,12 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
           type: BottomNavigationBarType.fixed,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          selectedItemColor: const Color(0xFF2D3561),
-          unselectedItemColor: const Color(0xFFB5BBC9),
+          selectedItemColor: isDark
+              ? AppTheme.darkSelected
+              : AppTheme.lightSelected,
+          unselectedItemColor: isDark
+              ? AppTheme.darkUnselected
+              : AppTheme.lightUnselected,
           selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 12,

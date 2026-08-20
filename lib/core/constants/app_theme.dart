@@ -4,12 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppTheme {
   static final Color lightSelected = Color(0xFF2D3561);
   static final Color lightUnselected = Color(0xFFB5BBC9);
+  static final Color darkUnselected = Colors.grey;
+  static final Color darkSelected = Colors.white;
   static final Color primaryBlue = Color(0xFF2A6AE8);
+  static final Color primaryDarkBlue = Color(0xFF1F243E);
   static final RadialGradient scaffoldGradient = RadialGradient(
     center: Alignment.topRight,
     radius: 1.0,
     colors: [
-      HSLColor.fromAHSL(1.0, 217, 0.96, 0.67).toColor(),
+      Color(0xFF93BBFB),
       HSLColor.fromAHSL(1.0, 217, 0.62, 0.96).toColor(),
     ],
   );
