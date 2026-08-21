@@ -6,7 +6,7 @@ import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/auth/controllers/auth_controller.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
 import 'package:weather_app/firebase_options.dart';
-import 'package:weather_app/features/onboarding/splash_screen.dart';
+import 'package:weather_app/features/onboarding/views/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
