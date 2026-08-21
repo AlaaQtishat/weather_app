@@ -5,11 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
-import 'package:weather_app/features/auth/models/user_model.dart';
+import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
+import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
+import 'package:weather_app/features/user/models/user_model.dart';
 import 'package:weather_app/features/weather/views/main_layout_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -354,6 +354,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             if (state is AuthLoading) {
                               return;
                             }
+                            FocusScope.of(context).unfocus();
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }

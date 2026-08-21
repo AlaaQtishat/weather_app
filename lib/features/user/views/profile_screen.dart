@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
+import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
+import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
-import 'package:weather_app/features/weather/widgets/letter_widget.dart';
-import 'package:weather_app/features/weather/widgets/notification_item_widget.dart';
-import 'package:weather_app/features/weather/widgets/preference_item_widget.dart';
-import 'package:weather_app/features/weather/widgets/profile_card_widget.dart';
-import 'package:weather_app/features/weather/widgets/stats_widget.dart';
+import 'package:weather_app/core/widgets/letter_widget.dart';
+import 'package:weather_app/features/user/cubit/user_cubit.dart';
+import 'package:weather_app/features/user/cubit/user_state.dart';
+import 'package:weather_app/features/user/views/widgets/notification_item_widget.dart';
+import 'package:weather_app/features/user/views/widgets/preference_item_widget.dart';
+import 'package:weather_app/features/user/views/widgets/profile_card_widget.dart';
+import 'package:weather_app/features/user/views/widgets/stats_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -28,24 +30,47 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(height: 80.h),
-                const LetterWidget(),
-                SizedBox(height: 14.h),
-                Text(
-                  "Alaa Qtishat",
-                  style: TextStyle(
-                    color: AppTheme.primaryDarkBlue,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 24.sp,
-                  ),
+                BlocBuilder<UserCubit, UserState>(
+                  builder: (context, userState) {
+                    if (userState is UserLoaded) {
+                      final user = userState.user;
+                      return Column(
+                        children: [
+                          LetterWidget(letter: user.fname[0].toUpperCase()),
+                          SizedBox(height: 14.h),
+                          Text(
+                            "${user.fname} ${user.lname}",
+                            style: TextStyle(
+                              color: AppTheme.primaryDarkBlue,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 24.sp,
+                            ),
+                          ),
+                          SizedBox(height: 4.h),
+                          Text(
+                            user.email,
+                            style: TextStyle(
+                              color: const Color(0xFF7B8BA4),
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else if (userState is UserError) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40.h),
+                        child: Text(userState.errorMessage),
+                      );
+                    } else if (userState is UserLoading) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(vertical: 40.h),
+                        child: const CircularProgressIndicator(),
+                      );
+                    }
+                    return SizedBox(height: 40.h);
+                  },
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  "alaaqtishat2004@gmail.com",
-                  style: TextStyle(
-                    color: const Color(0xFF7B8BA4),
-                    fontSize: 14.sp,
-                  ),
-                ),
+
                 SizedBox(height: 24.h),
 
                 StatsWidget(),
@@ -135,9 +160,9 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(height: 32.h),
 
                 BlocConsumer<AuthCubit, AuthState>(
-                  listener: (context, state) {
+                  listener: (context, authState) {
                     if (ModalRoute.of(context)?.isCurrent != true) return;
-                    if (state is AuthSuccess) {
+                    if (authState is AuthSuccess) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text("signed out successfully!"),
@@ -148,16 +173,16 @@ class ProfileScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(builder: (context) => SignIn()),
                       );
-                    } else if (state is AuthError) {
+                    } else if (authState is AuthError) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.errorMessage)),
+                        SnackBar(content: Text(authState.errorMessage)),
                       );
                     }
                   },
-                  builder: (context, state) {
+                  builder: (context, authState) {
                     return GestureDetector(
                       onTap: () {
-                        if (state is AuthLoading) {
+                        if (authState is AuthLoading) {
                           return;
                         }
                         context.read<AuthCubit>().logoutCubit();
@@ -174,8 +199,8 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         alignment: Alignment.center,
-                        child: state is AuthLoading
-                            ? CircularProgressIndicator()
+                        child: authState is AuthLoading
+                            ? const CircularProgressIndicator()
                             : Text(
                                 "Sign Out",
                                 style: TextStyle(

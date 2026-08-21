@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LetterWidget extends StatelessWidget {
-  const LetterWidget({super.key});
+  final String letter;
+  const LetterWidget({super.key, required this.letter});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class LetterWidget extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: Text(
-        "A",
+        letter.toUpperCase(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 55.sp,

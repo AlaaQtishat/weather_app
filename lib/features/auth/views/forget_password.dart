@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
+import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
+import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -111,6 +111,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                               if (state is AuthLoading) {
                                 return;
                               }
+                              FocusScope.of(context).unfocus();
                               if (_formKey.currentState!.validate()) {
                                 context.read<AuthCubit>().resetCubit(
                                   email: emailController.text,

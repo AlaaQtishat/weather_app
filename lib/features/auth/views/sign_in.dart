@@ -4,8 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
-import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
+import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
+import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
 import 'package:weather_app/features/auth/views/create_account.dart';
 import 'package:weather_app/features/auth/views/forget_password.dart';
@@ -186,7 +186,7 @@ class _SignInState extends State<SignIn> {
                             if (state is AuthLoading) {
                               return;
                             }
-
+                            FocusScope.of(context).unfocus();
                             if (_formKey.currentState!.validate()) {
                               context.read<AuthCubit>().signinCubit(
                                 email: emailController.text,

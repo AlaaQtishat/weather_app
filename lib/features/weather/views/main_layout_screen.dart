@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/weather/views/forecast_screen.dart';
 import 'package:weather_app/features/weather/views/home_screen.dart';
-import 'package:weather_app/features/weather/views/profile_screen.dart';
+import 'package:weather_app/features/user/views/profile_screen.dart';
 import 'package:weather_app/features/weather/views/search_screen.dart';
 
 class MainLayoutScreen extends StatefulWidget {
@@ -20,8 +22,15 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     const HomeScreen(),
     const SearchScreen(),
     const ForecastScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
+  @override
+  void initState() {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    context.read<UserCubit>().fetchUserData(uid);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

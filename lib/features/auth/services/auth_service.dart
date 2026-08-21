@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:weather_app/features/auth/models/user_model.dart';
+import 'package:weather_app/features/user/models/user_model.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,14 +39,5 @@ class AuthService {
 
   Future<void> logout() async {
     await _auth.signOut();
-  }
-
-  Future<UserModel?> getUserData(String uid) async {
-    DocumentSnapshot doc = await _firestore.collection('users').doc(uid).get();
-
-    if (doc.exists) {
-      return UserModel.fromJson(doc.data() as Map<String, dynamic>);
-    }
-    return null;
   }
 }
