@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:weather_app/features/auth/models/user_model.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
-import 'package:weather_app/features/auth/services/shared_prefs_service.dart';
+import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
 
 class AuthController {
   AuthService authService = AuthService();
-  SharedPrefsService sharedPrefsService = SharedPrefsService();
+  RememberMePrefs prefs = RememberMePrefs();
   Future<String?> loginEmailPassword({
     required String email,
     required String password,
@@ -14,10 +14,10 @@ class AuthController {
     try {
       await authService.signIn(email: email, password: password);
       if (rememberMe) {
-        await sharedPrefsService.saveEmail(email);
-        await sharedPrefsService.savePassword(password);
+        await prefs.saveEmail(email);
+        await prefs.savePassword(password);
       } else {
-        await sharedPrefsService.clearCredentials();
+        await prefs.clearCredentials();
       }
       return null;
     } on FirebaseAuthException catch (e, st) {
@@ -35,7 +35,6 @@ class AuthController {
   }) async {
     try {
       await authService.createAccount(user: user, password: password);
-      await sharedPrefsService.saveEmail(user.email);
       return null;
     } on FirebaseAuthException catch (e, st) {
       print("FirebaseAuthException in signup: ${e.message} , $st");

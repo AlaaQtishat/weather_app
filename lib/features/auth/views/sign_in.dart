@@ -6,6 +6,7 @@ import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
+import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
 import 'package:weather_app/features/auth/views/create_account.dart';
 import 'package:weather_app/features/auth/views/forget_password.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
@@ -20,14 +21,36 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  RememberMePrefs prefs = RememberMePrefs();
   bool isRememberMeChecked = false;
   @override
   void dispose() {
     emailController.dispose();
-    passwordcontroller.dispose();
+    passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    final savedEmail = await prefs.getEmail();
+    final savedPassword = await prefs.getPassword();
+    if (savedEmail != null &&
+        savedEmail.isNotEmpty &&
+        savedPassword != null &&
+        savedPassword.isNotEmpty) {
+      setState(() {
+        emailController.text = savedEmail;
+        passwordController.text = savedPassword;
+        isRememberMeChecked = true;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    _loadSavedCredentials();
+    super.initState();
   }
 
   @override
@@ -74,7 +97,7 @@ class _SignInState extends State<SignIn> {
                     CustomTextField(
                       hint: "Password",
                       isPassword: true,
-                      controller: passwordcontroller,
+                      controller: passwordController,
                       validator: AppValidators.validatePassword,
                     ),
                     SizedBox(height: 12.h),
@@ -167,7 +190,7 @@ class _SignInState extends State<SignIn> {
                             if (_formKey.currentState!.validate()) {
                               context.read<AuthCubit>().signinCubit(
                                 email: emailController.text,
-                                password: passwordcontroller.text,
+                                password: passwordController.text,
                                 isRememberMe: isRememberMeChecked,
                               );
                             }
