@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
@@ -66,19 +67,7 @@ class _SignInState extends State<SignIn> {
                     CustomTextField(
                       controller: emailController,
                       hint: "Email",
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return "Email is required";
-                        }
-
-                        if (!RegExp(
-                          r"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+$",
-                        ).hasMatch(val)) {
-                          return "Please enter a valid email address";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.validateEmail,
                       keyboardType: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 8.h),
@@ -86,32 +75,7 @@ class _SignInState extends State<SignIn> {
                       hint: "Password",
                       isPassword: true,
                       controller: passwordcontroller,
-                      validator: (val) {
-                        if (val == null || val.isEmpty)
-                          return "Password is required";
-
-                        if (val.length < 8) {
-                          return "Password must be at least 8 characters";
-                        }
-
-                        if (!RegExp(r'[A-Z]').hasMatch(val)) {
-                          return "Must contain at least one uppercase letter";
-                        }
-
-                        if (!RegExp(r'[a-z]').hasMatch(val)) {
-                          return "Must contain at least one lowercase letter";
-                        }
-
-                        if (!RegExp(r'[0-9]').hasMatch(val)) {
-                          return "Must contain at least one number";
-                        }
-
-                        if (!RegExp(r'[!@#\$&*~_=%^]+').hasMatch(val)) {
-                          return "Must contain at least one special character";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.validatePassword,
                     ),
                     SizedBox(height: 12.h),
                     Row(

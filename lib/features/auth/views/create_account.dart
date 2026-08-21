@@ -1,15 +1,15 @@
-import 'package:dlibphonenumber/dlibphonenumber.dart' as dlib;
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/controllers/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/models/user_model.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
-import 'package:weather_app/features/auth/views/widgets/phone_field.dart';
 import 'package:weather_app/features/weather/views/main_layout_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -21,6 +21,7 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final fnameController = TextEditingController();
   final lnameController = TextEditingController();
   final emailController = TextEditingController();
@@ -28,12 +29,9 @@ class _CreateAccountState extends State<CreateAccount> {
   final confirmPasswordController = TextEditingController();
   final birthdateController = TextEditingController();
   final phoneController = TextEditingController();
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  String fullPhoneNumber = "";
-  String selectedCountryCode = "JO";
-  String? phoneError;
+  String selectedCountryCode = 'JO';
+  String selectedDialCode = '+962';
+  String selectedFlag = '🇯🇴';
 
   @override
   void dispose() {
@@ -97,23 +95,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     CustomTextField(
                       hint: "First name",
                       controller: fnameController,
-                      validator: (val) {
-                        if (val == null || val.trim().isEmpty) {
-                          return "Name is required";
-                        }
-
-                        if (val.trim().length < 2) {
-                          return "Name must be at least 2 characters";
-                        }
-
-                        if (!RegExp(
-                          r"^[a-zA-Z\u0600-\u06FF\s]+$",
-                        ).hasMatch(val)) {
-                          return "Please enter a valid name (letters only)";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.validateFname,
                     ),
 
                     SizedBox(height: 8.h),
@@ -121,23 +103,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     CustomTextField(
                       hint: "Last name",
                       controller: lnameController,
-                      validator: (val) {
-                        if (val == null || val.trim().isEmpty) {
-                          return "Name is required";
-                        }
-
-                        if (val.trim().length < 2) {
-                          return "Name must be at least 2 characters";
-                        }
-
-                        if (!RegExp(
-                          r"^[a-zA-Z\u0600-\u06FF\s]+$",
-                        ).hasMatch(val)) {
-                          return "Please enter a valid name (letters only)";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.validateLname,
                     ),
 
                     SizedBox(height: 8.h),
@@ -145,32 +111,15 @@ class _CreateAccountState extends State<CreateAccount> {
                     CustomTextField(
                       hint: "Email",
                       controller: emailController,
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return "Email is required";
-                        }
-
-                        if (!RegExp(
-                          r"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+$",
-                        ).hasMatch(val)) {
-                          return "Please enter a valid email address";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.validateEmail,
                     ),
 
                     SizedBox(height: 8.h),
 
                     CustomTextField(
                       controller: birthdateController,
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return "Birthdate is required";
-                        }
+                      validator: AppValidators.validateBirthdate,
 
-                        return null;
-                      },
                       hint: "dd/mm/yyyy",
                       isCalender: true,
                       onTap: () async {
@@ -271,22 +220,81 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
 
                     SizedBox(height: 8.h),
-
-                    PhoneField(
+                    CustomTextField(
+                      hint: "Phone Number",
                       controller: phoneController,
-                      errorText: phoneError,
-                      onChanged: (phone, countryCode) {
-                        print("PHONE: $phone");
-                        print("COUNTRY: $countryCode");
+                      isPhoneNumber: true,
+                      keyboardType: TextInputType.phone,
+                      countryFlag: selectedFlag,
+                      countryDialCode: selectedDialCode,
+                      onCountryTap: () {
+                        showCountryPicker(
+                          context: context,
+                          showPhoneCode: true,
+                          countryListTheme: CountryListThemeData(
+                            flagSize: 26.sp,
+                            backgroundColor: Colors.blueGrey.shade50,
+                            textStyle: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.black87,
+                            ),
 
-                        fullPhoneNumber = phone;
-                        selectedCountryCode = countryCode;
+                            bottomSheetHeight: 500.h,
 
-                        if (phoneError != null) {
-                          setState(() {
-                            phoneError = null;
-                          });
-                        }
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(24.r),
+                              topRight: Radius.circular(24.r),
+                            ),
+
+                            inputDecoration: InputDecoration(
+                              filled: true,
+                              fillColor: Theme.of(context).cardColor,
+                              hintText: 'Search for a country',
+                              hintStyle: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16.sp,
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.grey,
+                              ),
+
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.grey.shade100,
+                                ),
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: AppTheme.primaryBlue,
+                                ),
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                            ),
+                          ),
+
+                          onSelect: (Country country) {
+                            setState(() {
+                              selectedCountryCode = country.countryCode;
+                              selectedDialCode = '+${country.phoneCode}';
+                              selectedFlag = country.flagEmoji;
+                            });
+                          },
+                        );
+                      },
+                      validator: (val) {
+                        String fullPhone =
+                            selectedDialCode + (val ?? '').trim();
+
+                        return AppValidators.validatePhone(
+                          val,
+                          fullPhone,
+                          selectedCountryCode,
+                        );
                       },
                     ),
 
@@ -296,33 +304,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       hint: "Password",
                       isPassword: true,
                       controller: passwordController,
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return "Password is required";
-                        }
-
-                        if (val.length < 8) {
-                          return "Password must be at least 8 characters";
-                        }
-
-                        if (!RegExp(r'[A-Z]').hasMatch(val)) {
-                          return "Must contain at least one uppercase letter";
-                        }
-
-                        if (!RegExp(r'[a-z]').hasMatch(val)) {
-                          return "Must contain at least one lowercase letter";
-                        }
-
-                        if (!RegExp(r'[0-9]').hasMatch(val)) {
-                          return "Must contain at least one number";
-                        }
-
-                        if (!RegExp(r'[!@#\$&*~_=%^]+').hasMatch(val)) {
-                          return "Must contain at least one special character";
-                        }
-
-                        return null;
-                      },
+                      validator: AppValidators.validatePassword,
                     ),
 
                     SizedBox(height: 8.h),
@@ -331,18 +313,10 @@ class _CreateAccountState extends State<CreateAccount> {
                       hint: "Confirm password",
                       isPassword: true,
                       controller: confirmPasswordController,
-                      validator: (val) {
-                        if (val == null || val.isEmpty) {
-                          return "Confirm Password is required";
-                        }
-
-                        if (passwordController.text !=
-                            confirmPasswordController.text) {
-                          return "passwords don't match";
-                        }
-
-                        return null;
-                      },
+                      validator: (val) => AppValidators.validateConfirmPassword(
+                        val,
+                        passwordController.text,
+                      ),
                     ),
 
                     SizedBox(height: 32.h),
@@ -380,22 +354,19 @@ class _CreateAccountState extends State<CreateAccount> {
                             if (state is AuthLoading) {
                               return;
                             }
-
-                            final isFormValid = _formKey.currentState!
-                                .validate();
-
-                            final isPhoneValid = validatePhone();
-
-                            if (!isFormValid || !isPhoneValid) {
+                            if (!_formKey.currentState!.validate()) {
                               return;
                             }
+
+                            String finalPhoneNumber =
+                                selectedDialCode + phoneController.text.trim();
 
                             final user = UserModel(
                               email: emailController.text.trim(),
                               fname: fnameController.text.trim(),
                               lname: lnameController.text.trim(),
                               birthdate: birthdateController.text,
-                              phoneNumber: fullPhoneNumber,
+                              phoneNumber: finalPhoneNumber,
                             );
 
                             context.read<AuthCubit>().registerCubit(
@@ -440,54 +411,5 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
       ),
     );
-  }
-
-  bool validatePhone() {
-    if (fullPhoneNumber.trim().isEmpty) {
-      setState(() {
-        phoneError = "Phone number is required";
-      });
-
-      return false;
-    }
-
-    try {
-      final phoneUtil = dlib.PhoneNumberUtil.instance;
-
-      final parsedPhone = phoneUtil.parse(fullPhoneNumber, selectedCountryCode);
-
-      if (!phoneUtil.isValidNumber(parsedPhone)) {
-        setState(() {
-          phoneError = "Please enter a valid phone number";
-        });
-
-        return false;
-      }
-
-      final numberType = phoneUtil.getNumberType(parsedPhone);
-
-      if (numberType != dlib.PhoneNumberType.mobile &&
-          numberType != dlib.PhoneNumberType.fixedLineOrMobile) {
-        setState(() {
-          phoneError = "Please enter a valid mobile number";
-        });
-
-        return false;
-      }
-
-      setState(() {
-        phoneError = null;
-      });
-
-      return true;
-    } catch (e) {
-      print("PHONE VALIDATION ERROR: $e");
-
-      setState(() {
-        phoneError = "Please enter a valid phone number";
-      });
-
-      return false;
-    }
   }
 }

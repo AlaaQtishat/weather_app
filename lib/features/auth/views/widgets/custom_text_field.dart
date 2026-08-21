@@ -10,8 +10,11 @@ class CustomTextField extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController controller;
   final String hint;
-
+  final String countryFlag;
+  final String countryDialCode;
+  final VoidCallback? onCountryTap;
   VoidCallback? onTap;
+
   CustomTextField({
     required this.validator,
     super.key,
@@ -22,15 +25,18 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     required this.controller,
     this.onTap,
+    this.countryFlag = '🇯🇴',
+    this.countryDialCode = '+962',
+    this.onCountryTap,
   });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
 }
 
-bool _obscureText = true;
-
 class _CustomTextFieldState extends State<CustomTextField> {
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -40,13 +46,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onTap: widget.onTap,
       cursorColor: Colors.grey,
       decoration: InputDecoration(
-        hint: Text(
-          widget.hint,
-          style: TextStyle(
-            color: Colors.grey,
-            fontWeight: FontWeight.w500,
-            fontSize: 16.sp,
-          ),
+        hintText: widget.hint,
+        hintStyle: TextStyle(
+          color: Colors.grey,
+          fontWeight: FontWeight.w500,
+          fontSize: 16.sp,
         ),
         filled: true,
         fillColor: theme.cardColor,
@@ -89,7 +93,40 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
         prefixIcon: widget.isPhoneNumber
-            ? Icon(Icons.outlined_flag, color: Colors.grey, size: 24.sp)
+            ? InkWell(
+                onTap: widget.onCountryTap,
+                borderRadius: BorderRadius.circular(12.r),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.countryFlag!,
+                        style: TextStyle(fontSize: 20.sp),
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        widget.countryDialCode!,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.black87,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Icon(Icons.arrow_drop_down, color: Colors.grey.shade600),
+                      SizedBox(width: 4.w),
+
+                      Container(
+                        height: 24.h,
+                        width: 1.w,
+                        color: Colors.grey.shade300,
+                      ),
+                      SizedBox(width: 8.w),
+                    ],
+                  ),
+                ),
+              )
             : null,
       ),
       obscureText: widget.isPassword ? _obscureText : false,
