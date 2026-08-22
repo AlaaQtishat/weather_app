@@ -185,7 +185,40 @@ class ProfileScreen extends StatelessWidget {
                         if (authState is AuthLoading) {
                           return;
                         }
-                        context.read<AuthCubit>().logoutCubit();
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "Logout?",
+
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppTheme.primaryDarkBlue,
+                              ),
+                            ),
+                            content: Text("Are you sure you want to logout?"),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  context.read<AuthCubit>().logoutCubit();
+                                },
+                                child: authState is AuthLoading
+                                    ? const CircularProgressIndicator()
+                                    : Text("Yes"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Cancel"),
+                              ),
+                            ],
+                          ),
+                        );
                       },
                       child: Container(
                         width: double.infinity,
@@ -199,16 +232,14 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ),
                         alignment: Alignment.center,
-                        child: authState is AuthLoading
-                            ? const CircularProgressIndicator()
-                            : Text(
-                                "Sign Out",
-                                style: TextStyle(
-                                  color: const Color(0xFFE57373),
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                        child: Text(
+                          "Sign Out",
+                          style: TextStyle(
+                            color: const Color(0xFFE57373),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     );
                   },

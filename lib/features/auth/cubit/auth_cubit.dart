@@ -16,7 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
     required bool isRememberMe,
   }) async {
-    emit(AuthLoading());
+    emit(AuthLoading(loadingSource: "email"));
     try {
       await authService.signIn(email: email, password: password);
 
@@ -45,7 +45,7 @@ class AuthCubit extends Cubit<AuthState> {
     required UserModel user,
     required String password,
   }) async {
-    emit(AuthLoading());
+    emit(AuthLoading(loadingSource: "email"));
     try {
       await authService.createAccount(user: user, password: password);
       emit(AuthSuccess());
@@ -63,7 +63,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> resetCubit({required String email}) async {
-    emit(AuthLoading());
+    emit(AuthLoading(loadingSource: "email"));
     try {
       await authService.resetPassword(email: email);
       emit(AuthSuccess());
@@ -81,7 +81,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> logoutCubit() async {
-    emit(AuthLoading());
+    emit(AuthLoading(loadingSource: "logout"));
     try {
       await authService.logout();
       emit(AuthSuccess());
@@ -90,6 +90,28 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthError(errorMessage: e.message ?? "Logout failed"));
     } catch (e, st) {
       print("Unexpected error in logout: ${e.toString()} , $st");
+      emit(
+        AuthError(
+          errorMessage: "Something went wrong, please try again later.",
+        ),
+      );
+    }
+  }
+
+  Future<void> googleSignInCubit() async {
+    emit(AuthLoading(loadingSource: "google"));
+    try {
+      await authService.signInWithGoogle();
+      if (FirebaseAuth.instance.currentUser != null) {
+        emit(AuthSuccess());
+      } else {
+        emit(AuthInitial());
+      }
+    } on FirebaseAuthException catch (e, st) {
+      print("FirebaseAuthException in Google Login: ${e.message} , $st");
+      emit(AuthError(errorMessage: e.message ?? "Google Sign-In failed"));
+    } catch (e, st) {
+      print("Unexpected error in Google Login: ${e.toString()} , $st");
       emit(
         AuthError(
           errorMessage: "Something went wrong, please try again later.",

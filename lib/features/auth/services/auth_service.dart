@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:weather_app/features/user/models/user_model.dart';
 
 class AuthService {
@@ -39,5 +40,50 @@ class AuthService {
 
   Future<void> logout() async {
     await _auth.signOut();
+  }
+
+  Future<void> signInWithGoogle() async {
+    final GoogleSignInAccount googleUser = await GoogleSignIn.instance
+        .authenticate();
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+    );
+
+    UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithCredential(credential);
+    User? firebaseUser = userCredential.user;
+    if (firebaseUser != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get();
+
+      if (!userDoc.exists) {
+        List<String> nameParts = (firebaseUser.displayName ?? "User").split(
+          " ",
+        );
+        String fName = nameParts.isNotEmpty ? nameParts[0] : "User";
+        String lName = nameParts.length > 1
+            ? nameParts.sublist(1).join(" ")
+            : "";
+
+        UserModel newUser = UserModel(
+          fname: fName,
+          lname: lName,
+          email: firebaseUser.email ?? "",
+          phoneNumber: "Not provided",
+          birthdate: "Not provided",
+        );
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(firebaseUser.uid)
+            .set(newUser.toJson());
+      }
+    }
   }
 }

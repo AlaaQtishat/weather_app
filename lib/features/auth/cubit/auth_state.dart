@@ -8,8 +8,12 @@ class AuthInitial extends AuthState {
 }
 
 class AuthLoading extends AuthState {
+  final String loadingSource;
+
+  AuthLoading({required this.loadingSource});
+
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [loadingSource];
 }
 
 class AuthSuccess extends AuthState {

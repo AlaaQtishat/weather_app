@@ -177,7 +177,9 @@ class _SignInState extends State<SignIn> {
                       },
                       builder: (context, state) {
                         return CustomElevatedButton(
-                          content: state is AuthLoading
+                          content:
+                              state is AuthLoading &&
+                                  state.loadingSource == "email"
                               ? const CircularProgressIndicator(
                                   color: Colors.white,
                                 )
@@ -209,36 +211,68 @@ class _SignInState extends State<SignIn> {
                       ],
                     ),
                     SizedBox(height: 16.h),
-                    CustomElevatedButton(
-                      backgroundColor: Colors.white,
-                      textColor: Colors.black,
-                      content: Row(
-                        children: [
-                          SizedBox(width: 32.w),
-                          SizedBox(
-                            width: 40.w,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                "assets/images/google.png",
-                                height: 28.h,
-                                width: 28.w,
-                              ),
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (ModalRoute.of(context)?.isCurrent != true) return;
+                        if (state is AuthSuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Signed in Successfully!"),
                             ),
-                          ),
+                          );
 
-                          SizedBox(width: 10.w),
-                          Expanded(
-                            child: Text(
-                              "Continue with Google",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.start,
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainLayoutScreen(),
                             ),
+                          );
+                        } else if (state is AuthError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.errorMessage)),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return CustomElevatedButton(
+                          backgroundColor: Colors.white,
+                          textColor: Colors.black,
+                          content: Row(
+                            children: [
+                              SizedBox(width: 32.w),
+                              SizedBox(
+                                width: 40.w,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Image.asset(
+                                    "assets/images/google.png",
+                                    height: 28.h,
+                                    width: 28.w,
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: Text(
+                                  "Continue with Google",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      onPressed: () {},
+                          onPressed: () {
+                            if (state is AuthLoading) {
+                              return;
+                            }
+                            FocusScope.of(context).unfocus();
+                            context.read<AuthCubit>().googleSignInCubit();
+                          },
+                        );
+                      },
                     ),
+
                     SizedBox(height: 8.h),
 
                     CustomElevatedButton(
