@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">weather_app</string>
+    <string name="facebook_app_id">2112253332662907</string>
+    <string name="facebook_client_token">e6b5d659dd1e5ea42b8d885197d7069b</string>
+    <string name="facebook_login_protocol_scheme">fb2112253332662907</string>
+</resources>

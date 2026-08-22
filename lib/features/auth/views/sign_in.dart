@@ -274,38 +274,89 @@ class _SignInState extends State<SignIn> {
                     ),
 
                     SizedBox(height: 8.h),
-
-                    CustomElevatedButton(
-                      backgroundColor: Colors.white,
-                      textColor: Colors.black,
-                      content: Row(
-                        children: [
-                          SizedBox(width: 32.w),
-
-                          SizedBox(
-                            width: 40.w,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                "assets/images/facebook.png",
-                                height: 28.h,
-                                width: 28.w,
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthSuccess) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainLayoutScreen(),
+                            ),
+                          );
+                        } else if (state is AuthError) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.errorMessage)),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return CustomElevatedButton(
+                          backgroundColor: Colors.white,
+                          textColor: Colors.black,
+                          content: Row(
+                            children: [
+                              SizedBox(width: 32.w),
+                              SizedBox(
+                                width: 40.w,
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Image.asset(
+                                    "assets/images/facebook.png",
+                                    height: 28.h,
+                                    width: 28.w,
+                                  ),
+                                ),
                               ),
-                            ),
+                              SizedBox(width: 10.w),
+                              Expanded(
+                                child: Text(
+                                  "Continue with Facebook",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
+                            ],
                           ),
-
-                          SizedBox(width: 10.w),
-                          Expanded(
-                            child: Text(
-                              "Continue with Facebook",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                        ],
-                      ),
-                      onPressed: () {},
+                          onPressed: () {
+                            if (state is AuthLoading) return;
+                            context
+                                .read<AuthCubit>()
+                                .facebookSignInCubit(); // استدعاء الدالة
+                          },
+                        );
+                      },
                     ),
+                    // CustomElevatedButton(
+                    //   backgroundColor: Colors.white,
+                    //   textColor: Colors.black,
+                    //   content: Row(
+                    //     children: [
+                    //       SizedBox(width: 32.w),
+                    //
+                    //       SizedBox(
+                    //         width: 40.w,
+                    //         child: Align(
+                    //           alignment: Alignment.centerLeft,
+                    //           child: Image.asset(
+                    //             "assets/images/facebook.png",
+                    //             height: 28.h,
+                    //             width: 28.w,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //
+                    //       SizedBox(width: 10.w),
+                    //       Expanded(
+                    //         child: Text(
+                    //           "Continue with Facebook",
+                    //           style: TextStyle(fontWeight: FontWeight.bold),
+                    //           textAlign: TextAlign.start,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   onPressed: () {},
+                    // ),
                     SizedBox(height: 16.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

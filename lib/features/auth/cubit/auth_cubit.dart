@@ -119,4 +119,27 @@ class AuthCubit extends Cubit<AuthState> {
       );
     }
   }
+
+  Future<void> facebookSignInCubit() async {
+    emit(AuthLoading(loadingSource: "facebook"));
+    try {
+      await authService.signInWithFacebook();
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        emit(AuthSuccess());
+      } else {
+        emit(AuthInitial());
+      }
+    } on FirebaseAuthException catch (e, st) {
+      print("FirebaseAuthException in Facebook Login: ${e.message} , $st");
+      emit(AuthError(errorMessage: e.message ?? "Facebook Sign-In failed"));
+    } catch (e, st) {
+      print("Unexpected error in Facebook Login: ${e.toString()} , $st");
+      emit(
+        AuthError(
+          errorMessage: "Something went wrong, please try again later.",
+        ),
+      );
+    }
+  }
 }
