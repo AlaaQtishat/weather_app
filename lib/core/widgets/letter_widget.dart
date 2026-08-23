@@ -3,13 +3,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LetterWidget extends StatelessWidget {
   final String letter;
-  const LetterWidget({super.key, required this.letter});
+  final bool isProfileScreen;
+  const LetterWidget({
+    super.key,
+    required this.letter,
+    this.isProfileScreen = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 120.r,
-      height: 120.r,
+      width: isProfileScreen ? 120.r : 60.r,
+      height: isProfileScreen ? 120.r : 60.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: const LinearGradient(
@@ -31,7 +36,7 @@ class LetterWidget extends StatelessWidget {
         letter.toUpperCase(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 55.sp,
+          fontSize: isProfileScreen ? 55.sp : 24.sp,
           color: Colors.white,
         ),
       ),

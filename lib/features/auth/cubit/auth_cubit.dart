@@ -111,12 +111,17 @@ class AuthCubit extends Cubit<AuthState> {
       print("FirebaseAuthException in Google Login: ${e.message} , $st");
       emit(AuthError(errorMessage: e.message ?? "Google Sign-In failed"));
     } catch (e, st) {
-      print("Unexpected error in Google Login: ${e.toString()} , $st");
-      emit(
-        AuthError(
-          errorMessage: "Something went wrong, please try again later.",
-        ),
-      );
+      if (e.toString().contains('CANCELED') ||
+          e.toString().contains('canceled')) {
+        emit(AuthInitial());
+      } else {
+        print("Unexpected error in Google Login: ${e.toString()} , $st");
+        emit(
+          AuthError(
+            errorMessage: "Something went wrong, please try again later.",
+          ),
+        );
+      }
     }
   }
 

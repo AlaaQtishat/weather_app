@@ -8,6 +8,7 @@ class AppTheme {
   static final Color darkSelected = Colors.white;
   static final Color primaryBlue = Color(0xFF2A6AE8);
   static final Color primaryDarkBlue = Color(0xFF1F243E);
+  static final Color secondaryDarkBlue = Color(0xFF3A5A8A);
   static final RadialGradient scaffoldGradient = RadialGradient(
     center: Alignment.topRight,
     radius: 1.0,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
@@ -20,11 +21,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
-        child: SingleChildScrollView(
+      body: ContainerBackground(
+        content: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
             child: Column(
@@ -36,7 +34,10 @@ class ProfileScreen extends StatelessWidget {
                       final user = userState.user;
                       return Column(
                         children: [
-                          LetterWidget(letter: user.fname[0].toUpperCase()),
+                          LetterWidget(
+                            letter: user.fname[0].toUpperCase(),
+                            isProfileScreen: true,
+                          ),
                           SizedBox(height: 14.h),
                           Text(
                             "${user.fname} ${user.lname}",

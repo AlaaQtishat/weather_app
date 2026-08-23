@@ -1,23 +1,7 @@
 import 'package:dlibphonenumber/dlibphonenumber.dart' as dlib;
 
 class AppValidators {
-  static String? validateFname(String? val) {
-    if (val == null || val.trim().isEmpty) {
-      return "Name is required";
-    }
-
-    if (val.trim().length < 2) {
-      return "Name must be at least 2 characters";
-    }
-
-    if (!RegExp(r"^[a-zA-Z\u0600-\u06FF\s]+$").hasMatch(val)) {
-      return "Please enter a valid name (letters only)";
-    }
-
-    return null;
-  }
-
-  static String? validateLname(String? val) {
+  static String? validateName(String? val) {
     if (val == null || val.trim().isEmpty) {
       return "Name is required";
     }

@@ -8,6 +8,7 @@ import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
 import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
+import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/user/services/user_service.dart';
 import 'package:weather_app/firebase_options.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(create: (context) => AuthCubit(authService, prefs)),
             BlocProvider(create: (context) => UserCubit(userService)),
+            BlocProvider(create: (context) => LocationCubit()),
           ],
 
           child: MaterialApp(

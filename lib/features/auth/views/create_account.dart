@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/app_validators.dart';
+import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
@@ -53,11 +54,8 @@ class _CreateAccountState extends State<CreateAccount> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
-          child: SingleChildScrollView(
+        body: ContainerBackground(
+          content: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Form(
@@ -95,7 +93,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     CustomTextField(
                       hint: "First name",
                       controller: fnameController,
-                      validator: AppValidators.validateFname,
+                      validator: AppValidators.validateName,
                     ),
 
                     SizedBox(height: 8.h),
@@ -103,7 +101,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     CustomTextField(
                       hint: "Last name",
                       controller: lnameController,
-                      validator: AppValidators.validateLname,
+                      validator: AppValidators.validateName,
                     ),
 
                     SizedBox(height: 8.h),
@@ -345,7 +343,9 @@ class _CreateAccountState extends State<CreateAccount> {
                       },
                       builder: (context, state) {
                         return CustomElevatedButton(
-                          content: state is AuthLoading
+                          content:
+                              state is AuthLoading &&
+                                  state.loadingSource == "email"
                               ? const CircularProgressIndicator(
                                   color: Colors.white,
                                 )

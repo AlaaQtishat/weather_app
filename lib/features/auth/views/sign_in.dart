@@ -263,9 +263,8 @@ class _SignInState extends State<SignIn> {
                             ],
                           ),
                           onPressed: () {
-                            if (state is AuthLoading) {
-                              return;
-                            }
+                            if (state is AuthLoading) return;
+
                             FocusScope.of(context).unfocus();
                             context.read<AuthCubit>().googleSignInCubit();
                           },
@@ -319,44 +318,13 @@ class _SignInState extends State<SignIn> {
                           ),
                           onPressed: () {
                             if (state is AuthLoading) return;
-                            context
-                                .read<AuthCubit>()
-                                .facebookSignInCubit(); // استدعاء الدالة
+                            if (state is AuthLoading) return;
+                            context.read<AuthCubit>().facebookSignInCubit();
                           },
                         );
                       },
                     ),
-                    // CustomElevatedButton(
-                    //   backgroundColor: Colors.white,
-                    //   textColor: Colors.black,
-                    //   content: Row(
-                    //     children: [
-                    //       SizedBox(width: 32.w),
-                    //
-                    //       SizedBox(
-                    //         width: 40.w,
-                    //         child: Align(
-                    //           alignment: Alignment.centerLeft,
-                    //           child: Image.asset(
-                    //             "assets/images/facebook.png",
-                    //             height: 28.h,
-                    //             width: 28.w,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //
-                    //       SizedBox(width: 10.w),
-                    //       Expanded(
-                    //         child: Text(
-                    //           "Continue with Facebook",
-                    //           style: TextStyle(fontWeight: FontWeight.bold),
-                    //           textAlign: TextAlign.start,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    //   onPressed: () {},
-                    // ),
+
                     SizedBox(height: 16.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

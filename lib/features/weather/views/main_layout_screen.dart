@@ -19,17 +19,19 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
+    HomeScreen(),
     const SearchScreen(),
     const ForecastScreen(),
     ProfileScreen(),
   ];
   @override
   void initState() {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-
-    context.read<UserCubit>().fetchUserData(uid);
     super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      context.read<UserCubit>().fetchUserData(user.uid);
+    }
   }
 
   @override
