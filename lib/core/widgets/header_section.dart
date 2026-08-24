@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/letter_widget.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
@@ -21,7 +22,6 @@ class _HeaderSectionState extends State<HeaderSection> {
   final DateTime now = DateTime.now();
   @override
   void initState() {
-    context.read<LocationCubit>().fetchUserLocation();
     super.initState();
   }
 
@@ -68,13 +68,25 @@ class _HeaderSectionState extends State<HeaderSection> {
                 BlocBuilder<LocationCubit, LocationState>(
                   builder: (context, state) {
                     if (state is LocationLoading) {
-                      return const CircularProgressIndicator();
+                      return Skeletonizer(
+                        containersColor: AppTheme.primaryDarkBlue.withOpacity(
+                          0.12,
+                        ),
+                        child: Text(
+                          "Loading City",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
                     } else if (state is LocationLoaded) {
                       return Text(
                         widget.isHome ? "${state.cityName}" : "7-Day Forecast",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 28.sp,
+                          fontSize: state.cityName.length >= 12 ? 21.sp : 28.sp,
                           color: AppTheme.primaryDarkBlue,
                           fontWeight: FontWeight.bold,
                         ),
@@ -106,9 +118,8 @@ class _HeaderSectionState extends State<HeaderSection> {
                 child: Text(userState.errorMessage),
               );
             } else if (userState is UserLoading) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 40.h),
-                child: const CircularProgressIndicator(),
+              return Skeletonizer(
+                child: Column(children: [LetterWidget(letter: "A")]),
               );
             }
             return SizedBox(height: 40.h);
