@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,11 +24,29 @@ class _HeaderSectionState extends State<HeaderSection> {
   @override
   void initState() {
     super.initState();
+    final userCubit = context.read<UserCubit>();
+    if (userCubit.state is UserInitial) {
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        userCubit.fetchUserData(currentUser.uid);
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(now);
+    final locationState = context.watch<LocationCubit>().state;
+    final userState = context.watch<UserCubit>().state;
+
+    String displayCity = "Unknown Location";
+    if (locationState is LocationLoaded) {
+      displayCity = locationState.cityName;
+    } else if (locationState is LocationLoading ||
+        locationState is LocationInitial) {
+      displayCity = "Loading...";
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,16 +57,15 @@ class _HeaderSectionState extends State<HeaderSection> {
             Row(
               children: [
                 widget.isHome
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Icon(
                         Icons.pin_drop_outlined,
                         color: AppTheme.secondaryDarkBlue,
                         size: 14.sp,
                       ),
-                widget.isHome ? SizedBox() : SizedBox(width: 4.w),
-
+                widget.isHome ? const SizedBox() : SizedBox(width: 4.w),
                 Text(
-                  widget.isHome ? formattedDate : "Province of Turin",
+                  widget.isHome ? formattedDate : displayCity,
                   style: TextStyle(
                     color: AppTheme.secondaryDarkBlue,
                     fontSize: 14.sp,
@@ -63,68 +81,79 @@ class _HeaderSectionState extends State<HeaderSection> {
                         size: 16.sp,
                         color: Colors.grey,
                       )
-                    : SizedBox(),
-                widget.isHome ? SizedBox(width: 4.w) : SizedBox(),
-                BlocBuilder<LocationCubit, LocationState>(
-                  builder: (context, state) {
-                    if (state is LocationLoading) {
-                      return Skeletonizer(
-                        containersColor: AppTheme.primaryDarkBlue.withOpacity(
-                          0.12,
-                        ),
-                        child: Text(
-                          "Loading City",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 28.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      );
-                    } else if (state is LocationLoaded) {
-                      return Text(
-                        widget.isHome ? "${state.cityName}" : "7-Day Forecast",
-                        textAlign: TextAlign.center,
+                    : const SizedBox(),
+                widget.isHome ? SizedBox(width: 4.w) : const SizedBox(),
+
+                if (widget.isHome)
+                  if (locationState is LocationLoading ||
+                      locationState is LocationInitial)
+                    Skeletonizer(
+                      containersColor: AppTheme.primaryDarkBlue.withOpacity(
+                        0.12,
+                      ),
+                      child: Text(
+                        "Loading City",
                         style: TextStyle(
-                          fontSize: state.cityName.length >= 12 ? 21.sp : 28.sp,
-                          color: AppTheme.primaryDarkBlue,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.bold,
                         ),
-                      );
-                    } else if (state is LocationError) {
-                      return Text(
-                        state.errorMessage,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.red, fontSize: 16),
-                      );
-                    }
-                    return SizedBox();
-                  },
-                ),
+                      ),
+                    )
+                  else if (locationState is LocationLoaded)
+                    Text(
+                      locationState.cityName,
+                      style: TextStyle(
+                        fontSize: locationState.cityName.length >= 12
+                            ? 22.sp
+                            : 28.sp,
+                        color: AppTheme.primaryDarkBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  else
+                    Text(
+                      "Location Unknown",
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                else
+                  Text(
+                    "7-Day Forecast",
+                    style: TextStyle(
+                      fontSize: 22.sp,
+                      color: AppTheme.primaryDarkBlue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
               ],
             ),
           ],
         ),
-        BlocBuilder<UserCubit, UserState>(
-          builder: (context, userState) {
-            if (userState is UserLoaded) {
-              final user = userState.user;
-              return Column(
-                children: [LetterWidget(letter: user.fname[0].toUpperCase())],
-              );
-            } else if (userState is UserError) {
-              return Padding(
-                padding: EdgeInsets.symmetric(vertical: 40.h),
-                child: Text(userState.errorMessage),
-              );
-            } else if (userState is UserLoading) {
-              return Skeletonizer(
-                child: Column(children: [LetterWidget(letter: "A")]),
-              );
-            }
-            return SizedBox(height: 40.h);
-          },
-        ),
+
+        if (userState is UserLoaded)
+          LetterWidget(letter: userState.user.fname[0].toUpperCase())
+        else if (userState is UserError)
+          Container(
+            width: 40.w,
+            height: 40.w,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.red.shade50,
+              border: Border.all(color: Colors.red.shade200),
+            ),
+            child: Center(
+              child: Icon(
+                Icons.person_off_outlined,
+                color: Colors.redAccent,
+                size: 20.sp,
+              ),
+            ),
+          )
+        else
+          Skeletonizer(child: const LetterWidget(letter: "A")),
       ],
     );
   }

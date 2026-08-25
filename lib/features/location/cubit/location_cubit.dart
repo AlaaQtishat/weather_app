@@ -9,13 +9,18 @@ class LocationCubit extends Cubit<LocationState> {
     emit(LocationLoading());
     try {
       final position = await LocationService.getCurrentPosition();
-
       final cityName = await LocationService.getCityName(
         position.latitude,
         position.longitude,
       );
 
-      emit(LocationLoaded(cityName));
+      emit(
+        LocationLoaded(
+          cityName: cityName,
+          lat: position.latitude,
+          lon: position.longitude,
+        ),
+      );
     } catch (e) {
       emit(LocationError(e.toString()));
     }

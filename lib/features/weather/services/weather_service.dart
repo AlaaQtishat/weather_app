@@ -1,19 +1,45 @@
 import 'package:dio/dio.dart';
+import 'package:weather_app/core/constants/api_constants.dart';
 import 'package:weather_app/core/network/dio_helper.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
 
 class WeatherService {
+  static Exception _handleDioError(dynamic e) {
+    if (e is DioException) {
+      String errorMessage = "Oops! We couldn't fetch the weather.";
+
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.connectionError) {
+        errorMessage = "Please check your internet connection and try again.";
+      } else if (e.type == DioExceptionType.badResponse) {
+        final statusCode = e.response?.statusCode;
+        if (statusCode == 404) {
+          errorMessage =
+              "Service temporarily unavailable. Please try again later.";
+        } else if (statusCode == 500 || statusCode == 502) {
+          errorMessage = "Server error. Our team is working on it.";
+        }
+      }
+      print(e);
+      return Exception(errorMessage);
+    }
+
+    print(e);
+    return Exception('Unexpected error occurred. Please try again.');
+  }
+
   static Future<WeatherResponse> getCurrentWeather(
     double lat,
     double lon,
   ) async {
     try {
       String url =
-          "https://api.openweathermap.org/data/4.0/onecall/current?lat=$lat&lon=$lon&units=metric&appid=ef0ef81a018c79379c78f8c8b1874be7";
+          "${ApiConstants.baseUrl}/current?lat=$lat&lon=$lon&units=metric&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
       return WeatherResponse.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to load current weather data: $e');
+      throw _handleDioError(e);
     }
   }
 
@@ -23,22 +49,22 @@ class WeatherService {
   ) async {
     try {
       String url =
-          "https://api.openweathermap.org/data/4.0/onecall/timeline/1h?lat=$lat&lon=$lon&units=metric&appid=ef0ef81a018c79379c78f8c8b1874be7";
+          "${ApiConstants.baseUrl}/timeline/1h?lat=$lat&lon=$lon&units=metric&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
       return WeatherResponse.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to load hourly weather data: $e');
+      throw _handleDioError(e);
     }
   }
 
   static Future<WeatherResponse> getDailyWeather(double lat, double lon) async {
     try {
       String url =
-          "https://api.openweathermap.org/data/4.0/onecall/timeline/1day?lat=$lat&lon=$lon&units=metric&appid=ef0ef81a018c79379c78f8c8b1874be7";
+          "${ApiConstants.baseUrl}/timeline/1day?lat=$lat&lon=$lon&units=metric&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
       return WeatherResponse.fromJson(response.data);
     } catch (e) {
-      throw Exception('Failed to load daily timeline: $e');
+      throw _handleDioError(e);
     }
   }
 }

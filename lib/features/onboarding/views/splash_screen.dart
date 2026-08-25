@@ -6,8 +6,6 @@ import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/onboarding/services/seen_prefs.dart';
 import 'package:weather_app/features/onboarding/views/welcome_screen.dart';
-import 'package:weather_app/features/user/cubit/user_cubit.dart';
-import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/views/main_layout_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,11 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    if (user != null) {
-      context.read<UserCubit>().fetchUserData(user!.uid);
-    }
     context.read<LocationCubit>().fetchUserLocation();
-    context.read<WeatherCubit>().fetchWeatherData();
     navigateBasedOnAuth();
   }
 

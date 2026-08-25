@@ -1,8 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
-import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/weather/views/forecast_screen.dart';
 import 'package:weather_app/features/weather/views/home_screen.dart';
 import 'package:weather_app/features/user/views/profile_screen.dart';
@@ -19,7 +16,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    const HomeScreen(),
+    HomeScreen(),
     const SearchScreen(),
     const ForecastScreen(),
     ProfileScreen(),

@@ -16,7 +16,7 @@ class CurrentWeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSkeleton = Skeletonizer.of(context).enabled;
+    //final isSkeleton = Skeletonizer.of(context).enabled;
 
     return Container(
       padding: EdgeInsets.all(20.w),
@@ -90,15 +90,19 @@ class CurrentWeatherCard extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: isSkeleton
-                      ? Colors.grey.shade200
-                      : const Color(0xFF1E2432),
+                  color:
+                      // isSkeleton
+                      //     ? Colors.grey.shade200
+                      //     :
+                      const Color(0xFF1E2432),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
                   "Feels ${currentData.feelsLike.current.round()}°",
                   style: TextStyle(
-                    color: isSkeleton ? Colors.grey.shade400 : Colors.white,
+                    color:
+                        // isSkeleton ? Colors.grey.shade400 :
+                        Colors.white,
                     fontSize: 12.sp,
                   ),
                 ),
