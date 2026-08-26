@@ -153,47 +153,64 @@ class _HomeScreenState extends State<HomeScreen> {
     final rainValue = currentData.rain?.h1 ?? 0.0;
     final bool showRainAlert = rainValue > 0;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 60.h),
-            HeaderSection(isHome: true),
-            SizedBox(height: 30.h),
+    return RefreshIndicator(
+      onRefresh: () async {
+        final locationState = context.read<LocationCubit>().state;
 
-            CurrentWeatherCard(currentData: currentData, todayData: todayData),
+        if (locationState is LocationLoaded) {
+          await context.read<WeatherCubit>().fetchWeatherData(
+            locationState.lat,
+            locationState.lon,
+          );
+        } else {
+          await context.read<LocationCubit>().fetchUserLocation();
+        }
+      },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 60.h),
+              HeaderSection(isHome: true),
+              SizedBox(height: 30.h),
 
-            if (showRainAlert) ...[
-              SizedBox(height: 16.h),
-              RainAlertCard(rainValue: rainValue),
+              CurrentWeatherCard(
+                currentData: currentData,
+                todayData: todayData,
+              ),
+
+              if (showRainAlert) ...[
+                SizedBox(height: 16.h),
+                RainAlertCard(rainValue: rainValue),
+              ],
+
+              SizedBox(height: 24.h),
+
+              HourlyWeatherList(hourlyData: hourlyData),
+
+              SizedBox(height: 24.h),
+
+              WeatherDetailsGrid(currentData: currentData),
+
+              SizedBox(height: 24.h),
+
+              SunriseSunsetCard(
+                sunriseTimestamp: todayData.sunrise ?? currentData.sunrise ?? 0,
+                sunsetTimestamp: todayData.sunset ?? currentData.sunset ?? 0,
+              ),
+
+              SizedBox(height: 24.h),
+
+              if (showRainAlert) ...[
+                SizedBox(height: 16.h),
+                PrecipitationCard(hourlyData: hourlyData),
+              ],
+
+              SizedBox(height: 100.h),
             ],
-
-            SizedBox(height: 24.h),
-
-            HourlyWeatherList(hourlyData: hourlyData),
-
-            SizedBox(height: 24.h),
-
-            WeatherDetailsGrid(currentData: currentData),
-
-            SizedBox(height: 24.h),
-
-            SunriseSunsetCard(
-              sunriseTimestamp: todayData.sunrise ?? currentData.sunrise ?? 0,
-              sunsetTimestamp: todayData.sunset ?? currentData.sunset ?? 0,
-            ),
-
-            SizedBox(height: 24.h),
-
-            if (showRainAlert) ...[
-              SizedBox(height: 16.h),
-              PrecipitationCard(hourlyData: hourlyData),
-            ],
-
-            SizedBox(height: 100.h),
-          ],
+          ),
         ),
       ),
     );
