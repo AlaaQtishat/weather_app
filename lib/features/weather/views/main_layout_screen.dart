@@ -3,7 +3,7 @@ import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/weather/views/forecast_screen.dart';
 import 'package:weather_app/features/weather/views/home_screen.dart';
 import 'package:weather_app/features/user/views/profile_screen.dart';
-import 'package:weather_app/features/weather/views/search_screen.dart';
+import 'package:weather_app/features/search/views/search_screen.dart';
 
 class MainLayoutScreen extends StatefulWidget {
   const MainLayoutScreen({super.key});

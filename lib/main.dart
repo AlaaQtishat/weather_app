@@ -9,6 +9,7 @@ import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
 import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
+import 'package:weather_app/features/search/cubit/search_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/user/services/user_service.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => UserCubit(userService)),
             BlocProvider(create: (context) => LocationCubit()),
             BlocProvider(create: (context) => WeatherCubit()),
+            BlocProvider(create: (context) => SearchCubit()),
           ],
 
           child: MaterialApp(
