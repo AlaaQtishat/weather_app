@@ -7,6 +7,8 @@ import 'package:weather_app/core/utils/debouncer.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_state.dart';
+import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
+import 'package:weather_app/features/weather/views/city_weather_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -173,7 +175,25 @@ class _SearchScreenState extends State<SearchScreen> {
                           final flagEmoji = country?.flagEmoji ?? '📍';
 
                           return ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              double lat = searchState.results[index].lat;
+                              double lon = searchState.results[index].lon;
+
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => CityWeatherScreen(
+                                    lat: lat,
+                                    lon: lon,
+                                    cityName: cityName,
+                                    country: fullCountryName,
+                                  ),
+                                ),
+                              );
+                              Future.delayed(const Duration(seconds: 3), () {
+                                searchController.clear();
+                                context.read<SearchCubit>().resetSearch();
+                              });
+                            },
                             leading: Text(
                               flagEmoji,
                               style: TextStyle(fontSize: 28.sp),

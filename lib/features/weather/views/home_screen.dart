@@ -14,6 +14,7 @@ import 'package:weather_app/features/weather/views/widgets/hourly_weather_list.d
 import 'package:weather_app/features/weather/views/widgets/precipitation_card.dart';
 import 'package:weather_app/features/weather/views/widgets/rain_alert_card.dart';
 import 'package:weather_app/features/weather/views/widgets/sunrise_sunset_card.dart';
+import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_details_grid.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -94,10 +95,24 @@ class _HomeScreenState extends State<HomeScreen> {
     if (locationState is LocationLoading || locationState is LocationInitial) {
       return Skeletonizer(
         enabled: true,
-        child: _buildWeatherContent(
+        child: WeatherContent(
+          onRefresh: () async {
+            final locationState = context.read<LocationCubit>().state;
+
+            if (locationState is LocationLoaded) {
+              await context.read<WeatherCubit>().fetchWeatherData(
+                locationState.lat,
+                locationState.lon,
+              );
+            } else {
+              await context.read<LocationCubit>().fetchUserLocation();
+            }
+          },
+
           currentData: WeatherData.dummy,
           todayData: WeatherData.dummy,
           hourlyData: List.generate(5, (index) => WeatherData.dummy),
+          isHomeScreen: true,
         ),
       );
     }
@@ -125,95 +140,50 @@ class _HomeScreenState extends State<HomeScreen> {
       if (weatherState is WeatherLoading || weatherState is WeatherInitial) {
         return Skeletonizer(
           enabled: true,
-          child: _buildWeatherContent(
+          child: WeatherContent(
+            onRefresh: () async {
+              final locationState = context.read<LocationCubit>().state;
+
+              if (locationState is LocationLoaded) {
+                await context.read<WeatherCubit>().fetchWeatherData(
+                  locationState.lat,
+                  locationState.lon,
+                );
+              } else {
+                await context.read<LocationCubit>().fetchUserLocation();
+              }
+            },
             currentData: WeatherData.dummy,
             todayData: WeatherData.dummy,
             hourlyData: List.generate(5, (index) => WeatherData.dummy),
+            isHomeScreen: true,
           ),
         );
       }
 
       if (weatherState is WeatherLoaded) {
-        return _buildWeatherContent(
+        return WeatherContent(
+          onRefresh: () async {
+            final locationState = context.read<LocationCubit>().state;
+
+            if (locationState is LocationLoaded) {
+              await context.read<WeatherCubit>().fetchWeatherData(
+                locationState.lat,
+                locationState.lon,
+              );
+            } else {
+              await context.read<LocationCubit>().fetchUserLocation();
+            }
+          },
           currentData: weatherState.current.data.first,
           todayData: weatherState.daily.data.first,
           hourlyData: weatherState.hourly.data,
+          isHomeScreen: true,
         );
       }
     }
 
     return const SizedBox();
-  }
-
-  Widget _buildWeatherContent({
-    required WeatherData currentData,
-    required WeatherData todayData,
-    required List<WeatherData> hourlyData,
-  }) {
-    final rainValue = currentData.rain?.h1 ?? 0.0;
-    final bool showRainAlert = rainValue > 0;
-
-    return RefreshIndicator(
-      onRefresh: () async {
-        final locationState = context.read<LocationCubit>().state;
-
-        if (locationState is LocationLoaded) {
-          await context.read<WeatherCubit>().fetchWeatherData(
-            locationState.lat,
-            locationState.lon,
-          );
-        } else {
-          await context.read<LocationCubit>().fetchUserLocation();
-        }
-      },
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 60.h),
-              HeaderSection(isHome: true),
-              SizedBox(height: 30.h),
-
-              CurrentWeatherCard(
-                currentData: currentData,
-                todayData: todayData,
-              ),
-
-              if (showRainAlert) ...[
-                SizedBox(height: 16.h),
-                RainAlertCard(rainValue: rainValue),
-              ],
-
-              SizedBox(height: 24.h),
-
-              HourlyWeatherList(hourlyData: hourlyData),
-
-              SizedBox(height: 24.h),
-
-              WeatherDetailsGrid(currentData: currentData),
-
-              SizedBox(height: 24.h),
-
-              SunriseSunsetCard(
-                sunriseTimestamp: todayData.sunrise ?? currentData.sunrise ?? 0,
-                sunsetTimestamp: todayData.sunset ?? currentData.sunset ?? 0,
-              ),
-
-              SizedBox(height: 24.h),
-
-              if (showRainAlert) ...[
-                SizedBox(height: 16.h),
-                PrecipitationCard(hourlyData: hourlyData),
-              ],
-
-              SizedBox(height: 100.h),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildErrorWidget({
