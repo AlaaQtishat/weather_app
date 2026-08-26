@@ -30,11 +30,4 @@ class SearchResultModel {
       localNames: parsedLocalNames,
     );
   }
-
-  String get arabicName {
-    if (localNames != null && localNames!.containsKey('ar')) {
-      return localNames!['ar']!;
-    }
-    return name;
-  }
 }

@@ -1,7 +1,9 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/utils/debouncer.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_state.dart';
@@ -15,9 +17,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController searchController = TextEditingController();
+  final Debouncer _debouncer = Debouncer(milliseconds: 500);
   @override
   void dispose() {
     searchController.dispose();
+    _debouncer.dispose();
     super.dispose();
   }
 
@@ -59,8 +63,18 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 child: TextField(
                   controller: searchController,
+                  onChanged: (value) {
+                    if (value.trim().isEmpty) {
+                      context.read<SearchCubit>().resetSearch();
+                      return;
+                    }
+
+                    _debouncer.run(() {
+                      context.read<SearchCubit>().getSearchResult(value);
+                    });
+                  },
                   onSubmitted: (value) {
-                    context.read<SearchCubit>().getSearchResult(value);
+                    FocusScope.of(context).unfocus();
                   },
                   decoration: InputDecoration(
                     hintText: "Find your city",
@@ -145,16 +159,31 @@ class _SearchScreenState extends State<SearchScreen> {
                       return ListView.builder(
                         padding: EdgeInsets.zero,
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: searchState.results.length,
                         itemBuilder: (context, index) {
                           final cityName = searchState.results[index].name
                               .toString();
-                          final countryName = searchState.results[index].country
+                          final countryCode = searchState.results[index].country
                               .toString();
+                          final country = CountryService().findByCode(
+                            countryCode,
+                          );
+                          final fullCountryName = country?.name ?? countryCode;
+                          final flagEmoji = country?.flagEmoji ?? '📍';
+
                           return ListTile(
+                            onTap: () {},
+                            leading: Text(
+                              flagEmoji,
+                              style: TextStyle(fontSize: 28.sp),
+                            ),
                             title: Text(cityName),
-                            subtitle: Text(countryName),
+                            subtitle: Text(fullCountryName),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              color: Colors.grey,
+                            ),
                           );
                         },
                       );
