@@ -187,7 +187,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             SizedBox(height: 24.h),
 
-            PrecipitationCard(hourlyData: hourlyData),
+            if (showRainAlert) ...[
+              SizedBox(height: 16.h),
+              PrecipitationCard(hourlyData: hourlyData),
+            ],
 
             SizedBox(height: 100.h),
           ],

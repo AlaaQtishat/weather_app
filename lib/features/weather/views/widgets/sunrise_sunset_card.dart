@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
+import 'dart:async';
 
-class SunriseSunsetCard extends StatelessWidget {
+class SunriseSunsetCard extends StatefulWidget {
   final int sunriseTimestamp;
   final int sunsetTimestamp;
 
@@ -14,14 +15,43 @@ class SunriseSunsetCard extends StatelessWidget {
   });
 
   @override
+  State<SunriseSunsetCard> createState() => _SunriseSunsetCardState();
+}
+
+class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
+  late DateTime now;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    now = DateTime.now();
+
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      setState(() {
+        now = DateTime.now();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (sunriseTimestamp == 0 || sunsetTimestamp == 0) return const SizedBox();
+    if (widget.sunriseTimestamp == 0 || widget.sunsetTimestamp == 0) {
+      return const SizedBox();
+    }
 
     final sunrise = DateTime.fromMillisecondsSinceEpoch(
-      sunriseTimestamp * 1000,
+      widget.sunriseTimestamp * 1000,
     );
-    final sunset = DateTime.fromMillisecondsSinceEpoch(sunsetTimestamp * 1000);
-    final now = DateTime.now();
+    final sunset = DateTime.fromMillisecondsSinceEpoch(
+      widget.sunsetTimestamp * 1000,
+    );
 
     final timeFormat = DateFormat('HH:mm');
 
@@ -129,10 +159,10 @@ class SunArcPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5
-      ..strokeCap = StrokeCap.round;
+    final paint = Paint();
+    paint.style = PaintingStyle.stroke;
+    paint.strokeWidth = 2.5;
+    paint.strokeCap = StrokeCap.round;
 
     paint.shader = LinearGradient(
       colors: [Colors.orange.shade400, Colors.purple.shade200],
@@ -147,14 +177,24 @@ class SunArcPainter extends CustomPainter {
       size.height,
     );
     canvas.drawPath(path, paint);
-
     int progress = now.millisecondsSinceEpoch - sunrise.millisecondsSinceEpoch;
     int total = sunset.millisecondsSinceEpoch - sunrise.millisecondsSinceEpoch;
-    double ratio = (progress / total).clamp(0.0, 1.0);
 
-    double x = 10 + (size.width - 20) * ratio;
+    double t = (progress / total).clamp(0.0, 1.0);
+
+    double startX = 10;
+    double startY = size.height;
+
+    double controlX = size.width / 2;
+    double controlY = -size.height * 0.5;
+
+    double endX = size.width - 10;
+    double endY = size.height;
+
+    double x =
+        pow(1 - t, 2) * startX + 2 * (1 - t) * t * controlX + pow(t, 2) * endX;
     double y =
-        size.height - (size.height * 1.5 * (1 - pow((2 * ratio - 1), 2)));
+        pow(1 - t, 2) * startY + 2 * (1 - t) * t * controlY + pow(t, 2) * endY;
 
     canvas.drawCircle(
       Offset(x, y),
