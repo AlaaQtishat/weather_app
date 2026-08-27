@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/network/dio_helper.dart';
+import 'package:weather_app/core/theme/cubit/theme_cubit.dart';
+import 'package:weather_app/core/theme/cubit/theme_state.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
 import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
@@ -55,12 +57,20 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => WeatherCubit()),
             BlocProvider(create: (context) => SearchCubit()),
             BlocProvider(create: (context) => RecentsCubit()),
+            BlocProvider(create: (context) => ThemeCubit()),
           ],
 
-          child: MaterialApp(
-            home: SplashScreen(),
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
+          child: BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, themeState) {
+              return MaterialApp(
+                home: SplashScreen(),
+                debugShowCheckedModeBanner: false,
+
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeState.themeMode,
+              );
+            },
           ),
         );
       },
