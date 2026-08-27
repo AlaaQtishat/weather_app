@@ -2,6 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
 import 'package:weather_app/features/search/services/recents_service.dart';
 import 'package:weather_app/features/weather/views/city_weather_screen.dart';
@@ -15,7 +16,7 @@ class SearchResultsList extends StatelessWidget {
     required this.results,
     required this.searchController,
   });
-  RecentsService recentsService = RecentsService();
+  // RecentsService recentsService = RecentsService();
   @override
   Widget build(BuildContext context) {
     if (results.isEmpty) {
@@ -70,7 +71,7 @@ class SearchResultsList extends StatelessWidget {
                 searchController.clear();
                 context.read<SearchCubit>().resetSearch();
               });
-              recentsService.saveRecentSearches(
+              context.read<RecentsCubit>().saveRecent(
                 cityName,
                 fullCountryName,
                 lat,

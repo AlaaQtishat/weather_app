@@ -19,14 +19,16 @@ class LocationLoaded extends LocationState {
   final String cityName;
   final double lat;
   final double lon;
+  final String countryName;
 
   LocationLoaded({
     required this.cityName,
     required this.lat,
     required this.lon,
+    required this.countryName,
   });
   @override
-  List<Object?> get props => [cityName, lat, lon];
+  List<Object?> get props => [cityName, lat, lon, countryName];
 }
 
 class LocationError extends LocationState {

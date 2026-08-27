@@ -4,13 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/location/cubit/location_state.dart';
+import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
+import 'package:weather_app/features/search/services/recents_service.dart';
 import 'package:weather_app/features/weather/views/city_weather_screen.dart';
 
 class CurrentLocationButton extends StatelessWidget {
   final TextEditingController searchController;
-  const CurrentLocationButton({super.key, required this.searchController});
-
+  CurrentLocationButton({super.key, required this.searchController});
+  // RecentsService recentsService = RecentsService();
   @override
   Widget build(BuildContext context) {
     final locationState = context.watch<LocationCubit>().state;
@@ -21,10 +23,36 @@ class CurrentLocationButton extends StatelessWidget {
           ? null
           : () {
               if (locationState is LocationLoaded) {
-                searchController.text = locationState.cityName;
-                context.read<SearchCubit>().getSearchResult(
+                context.read<RecentsCubit>().saveRecent(
                   locationState.cityName,
+                  locationState.countryName,
+                  locationState.lat,
+                  locationState.lon,
                 );
+                // searchController.text = locationState.cityName;
+                // context.read<SearchCubit>().getSearchResult(
+                //   locationState.cityName,
+                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => CityWeatherScreen(
+                      lon: locationState.lon,
+                      lat: locationState.lat,
+                      cityName: locationState.cityName,
+                      country: locationState.countryName,
+                    ),
+                  ),
+                );
+                // Future.delayed(const Duration(seconds: 2), () {
+                //   searchController.clear();
+                //   context.read<SearchCubit>().resetSearch();
+                // });
+                // recentsService.saveRecentSearches(
+                //   locationState.cityName,
+                //   locationState.countryName,
+                //   locationState.lat,
+                //   locationState.lon,
+                // );
               } else {
                 searchController.clear();
                 context.read<SearchCubit>().resetSearch();

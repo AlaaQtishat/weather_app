@@ -57,4 +57,28 @@ class LocationService {
       return 'Unknown Location';
     }
   }
+
+  static Future<String> getCountryName(double lat, double lon) async {
+    try {
+      final Geocoding geocoding = Geocoding();
+      List<Placemark> placemarks = await geocoding.placemarkFromCoordinates(
+        lat,
+        lon,
+      );
+
+      if (placemarks.isNotEmpty) {
+        Placemark place = placemarks.first;
+
+        String country = place.country ?? "";
+        if (country.isNotEmpty) {
+          return country;
+        } else {
+          return '';
+        }
+      }
+      return '';
+    } catch (e) {
+      return 'Unknown Location';
+    }
+  }
 }
