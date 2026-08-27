@@ -22,7 +22,7 @@ class LocationCubit extends Cubit<LocationState> {
         ),
       );
     } catch (e) {
-      emit(LocationError(e.toString()));
+      emit(LocationError(e.toString().replaceAll("Exception: ", "")));
     }
   }
 }
