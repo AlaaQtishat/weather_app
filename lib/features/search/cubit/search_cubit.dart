@@ -11,7 +11,9 @@ class SearchCubit extends Cubit<SearchState> {
       final results = await SearchService.getSearchResults(name);
       emit(SearchLoaded(results: results));
     } catch (e) {
-      emit(SearchError(errorMessage: e.toString()));
+      emit(
+        SearchError(errorMessage: e.toString().replaceAll("Exception: ", "")),
+      );
     }
   }
 

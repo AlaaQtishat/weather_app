@@ -25,6 +25,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
+    FocusScope.of(context).unfocus();
     searchController.dispose();
     _debouncer.dispose();
     super.dispose();
@@ -53,46 +54,49 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ContainerBackground(
-        content: BlocListener<LocationCubit, LocationState>(
-          listener: _handleLocationListener,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 60.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SearchHeaderTitle(),
-                SizedBox(height: 32.h),
+    return GestureDetector(
+      onTap: FocusScope.of(context).unfocus,
+      child: Scaffold(
+        body: ContainerBackground(
+          content: BlocListener<LocationCubit, LocationState>(
+            listener: _handleLocationListener,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 60.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SearchHeaderTitle(),
+                  SizedBox(height: 32.h),
 
-                SearchBarWidget(
-                  controller: searchController,
-                  debouncer: _debouncer,
-                ),
-                SizedBox(height: 16.h),
+                  SearchBarWidget(
+                    controller: searchController,
+                    debouncer: _debouncer,
+                  ),
+                  SizedBox(height: 16.h),
 
-                BlocBuilder<SearchCubit, SearchState>(
-                  builder: (context, searchState) {
-                    if (searchState is InitialSearch ||
-                        searchState is SearchLoading) {
-                      return InitialSearchContent(
-                        searchController: searchController,
-                      );
-                    } else if (searchState is SearchError) {
-                      return SearchErrorWidget(
-                        errorMessage: searchState.errorMessage,
-                      );
-                    } else if (searchState is SearchLoaded) {
-                      return SearchResultsList(
-                        results: searchState.results,
-                        searchController: searchController,
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-                SizedBox(height: 80.h),
-              ],
+                  BlocBuilder<SearchCubit, SearchState>(
+                    builder: (context, searchState) {
+                      if (searchState is InitialSearch ||
+                          searchState is SearchLoading) {
+                        return InitialSearchContent(
+                          searchController: searchController,
+                        );
+                      } else if (searchState is SearchError) {
+                        return SearchErrorWidget(
+                          errorMessage: searchState.errorMessage,
+                        );
+                      } else if (searchState is SearchLoaded) {
+                        return SearchResultsList(
+                          results: searchState.results,
+                          searchController: searchController,
+                        );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                  SizedBox(height: 80.h),
+                ],
+              ),
             ),
           ),
         ),
@@ -142,6 +146,7 @@ class SearchErrorWidget extends StatelessWidget {
           Icon(Icons.search_off_sharp, size: 40.sp, color: Colors.redAccent),
           SizedBox(height: 8.h),
           Text(
+            textAlign: TextAlign.center,
             errorMessage,
             style: TextStyle(fontSize: 16.sp, color: Colors.grey),
           ),

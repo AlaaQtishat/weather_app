@@ -50,6 +50,7 @@ class SearchResultsList extends StatelessWidget {
 
           return ListTile(
             onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
               double lat = results[index].lat;
               double lon = results[index].lon;
 
@@ -63,6 +64,7 @@ class SearchResultsList extends StatelessWidget {
                   ),
                 ),
               );
+
               Future.delayed(const Duration(seconds: 3), () {
                 searchController.clear();
                 context.read<SearchCubit>().resetSearch();
