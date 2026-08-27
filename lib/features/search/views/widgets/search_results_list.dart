@@ -66,7 +66,7 @@ class SearchResultsList extends StatelessWidget {
                 ),
               );
 
-              Future.delayed(const Duration(seconds: 3), () {
+              Future.delayed(const Duration(seconds: 2), () {
                 searchController.clear();
                 context.read<SearchCubit>().resetSearch();
               });

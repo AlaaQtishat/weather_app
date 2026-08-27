@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
 
@@ -32,14 +33,13 @@ class CurrentWeatherCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           currentData.weather.isNotEmpty
               ? Image.asset(
                   WeatherAssets.getCustomIcon(currentData.weather.first.icon),
                   width: 140.w,
                   height: 140.h,
-
                   errorBuilder: (context, error, stackTrace) {
                     return Icon(
                       Icons.image_not_supported,
@@ -50,64 +50,70 @@ class CurrentWeatherCard extends StatelessWidget {
                 )
               : Icon(Icons.cloud, size: 80.w, color: Colors.grey),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                "${currentData.temp.current.round()}°",
-                style: TextStyle(
-                  fontSize: 48.sp,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF1E2432),
-                ),
-              ),
-              Text(
-                currentData.weather.isNotEmpty
-                    ? currentData.weather.first.description.toUpperCase()
-                    : "UNKNOWN",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xFF1E2432),
-                ),
-              ),
-              SizedBox(height: 8.h),
+          SizedBox(width: 16.w),
 
-              Row(
-                children: [
-                  Text(
-                    "↑ ${todayData.temp.max?.round() ?? '--'}°",
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    "↓ ${todayData.temp.min?.round() ?? '--'}°",
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color:
-                      // isSkeleton
-                      //     ? Colors.grey.shade200
-                      //     :
-                      const Color(0xFF1E2432),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Text(
-                  "Feels ${currentData.feelsLike.current.round()}°",
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "${currentData.temp.current.round()}°",
                   style: TextStyle(
-                    color:
-                        // isSkeleton ? Colors.grey.shade400 :
-                        Colors.white,
-                    fontSize: 12.sp,
+                    fontSize: 48.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primaryDarkBlue,
                   ),
                 ),
-              ),
-            ],
+                Text(
+                  currentData.weather.isNotEmpty
+                      ? currentData.weather.first.description.toUpperCase()
+                      : "UNKNOWN",
+
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.primaryDarkBlue,
+                    height: 1.2,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "↑ ${todayData.temp.max?.round() ?? '--'}°",
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                    SizedBox(width: 10.w),
+                    Text(
+                      "↓ ${todayData.temp.min?.round() ?? '--'}°",
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12.h),
+
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 6.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryDarkBlue,
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Text(
+                    "Feels ${currentData.feelsLike.current.round()}°",
+                    style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

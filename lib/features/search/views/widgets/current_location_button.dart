@@ -5,6 +5,7 @@ import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/location/cubit/location_state.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
+import 'package:weather_app/features/weather/views/city_weather_screen.dart';
 
 class CurrentLocationButton extends StatelessWidget {
   final TextEditingController searchController;

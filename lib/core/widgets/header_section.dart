@@ -103,9 +103,13 @@ class _HeaderSectionState extends State<HeaderSection> {
                     Text(
                       locationState.cityName,
                       style: TextStyle(
-                        fontSize: locationState.cityName.length >= 12
+                        fontSize: locationState.cityName.length <= 10
+                            ? 28.sp
+                            : locationState.cityName.length <= 15
+                            ? 24.sp
+                            : locationState.cityName.length <= 21
                             ? 22.sp
-                            : 28.sp,
+                            : 12.sp,
                         color: AppTheme.primaryDarkBlue,
                         fontWeight: FontWeight.bold,
                       ),
