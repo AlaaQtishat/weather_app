@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/views/widgets/custom_error_widget.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
 
 class CityWeatherScreen extends StatelessWidget {
@@ -44,6 +42,23 @@ class CityWeatherScreen extends StatelessWidget {
         child: CircularProgressIndicator(color: AppTheme.primaryBlue),
       );
     }
+
+    if (weatherState is WeatherError) {
+      final cleanMessage = weatherState.errorMessage.replaceAll(
+        'Exception: ',
+        '',
+      );
+      return CustomErrorWidget(
+        icon: Icons.cloud_off_rounded,
+        title: "Oops! We couldn't fetch the weather.",
+        message: cleanMessage,
+        buttonText: "Try Again",
+        onPressed: () {
+          context.read<WeatherCubit>().fetchWeatherData(lat, lon);
+        },
+      );
+    }
+
     if (weatherState is WeatherLoaded) {
       return WeatherContent(
         onRefresh: () async {

@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/debouncer.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
-import 'package:weather_app/features/location/cubit/location_cubit.dart';
-import 'package:weather_app/features/location/cubit/location_state.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_state.dart';
 import 'package:weather_app/features/search/views/widgets/initial_search_content.dart';
@@ -31,72 +29,48 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  void _handleLocationListener(
-    BuildContext context,
-    LocationState locationState,
-  ) {
-    if (locationState is LocationLoading) {
-      searchController.text = "getting location...";
-    } else if (locationState is LocationError) {
-      searchController.clear();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            "Unable to get your current location, please try again.",
-          ),
-        ),
-      );
-    } else if (locationState is LocationLoaded) {
-      searchController.text = locationState.cityName;
-      context.read<SearchCubit>().getSearchResult(locationState.cityName);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
       child: Scaffold(
         body: ContainerBackground(
-          content: BlocListener<LocationCubit, LocationState>(
-            listener: _handleLocationListener,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 60.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SearchHeaderTitle(),
-                  SizedBox(height: 32.h),
+          content: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 60.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SearchHeaderTitle(),
+                SizedBox(height: 32.h),
 
-                  SearchBarWidget(
-                    controller: searchController,
-                    debouncer: _debouncer,
-                  ),
-                  SizedBox(height: 16.h),
+                SearchBarWidget(
+                  controller: searchController,
+                  debouncer: _debouncer,
+                ),
+                SizedBox(height: 16.h),
 
-                  BlocBuilder<SearchCubit, SearchState>(
-                    builder: (context, searchState) {
-                      if (searchState is InitialSearch ||
-                          searchState is SearchLoading) {
-                        return InitialSearchContent(
-                          searchController: searchController,
-                        );
-                      } else if (searchState is SearchError) {
-                        return SearchErrorWidget(
-                          errorMessage: searchState.errorMessage,
-                        );
-                      } else if (searchState is SearchLoaded) {
-                        return SearchResultsList(
-                          results: searchState.results,
-                          searchController: searchController,
-                        );
-                      }
-                      return const SizedBox();
-                    },
-                  ),
-                  SizedBox(height: 80.h),
-                ],
-              ),
+                BlocBuilder<SearchCubit, SearchState>(
+                  builder: (context, searchState) {
+                    if (searchState is InitialSearch ||
+                        searchState is SearchLoading) {
+                      return InitialSearchContent(
+                        searchController: searchController,
+                      );
+                    } else if (searchState is SearchError) {
+                      return SearchErrorWidget(
+                        errorMessage: searchState.errorMessage,
+                      );
+                    } else if (searchState is SearchLoaded) {
+                      return SearchResultsList(
+                        results: searchState.results,
+                        searchController: searchController,
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                ),
+                SizedBox(height: 80.h),
+              ],
             ),
           ),
         ),

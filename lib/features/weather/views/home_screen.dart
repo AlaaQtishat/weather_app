@@ -3,19 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
-import 'package:weather_app/core/widgets/header_section.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/location/cubit/location_state.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
-import 'package:weather_app/features/weather/views/widgets/current_weather_card.dart';
-import 'package:weather_app/features/weather/views/widgets/hourly_weather_list.dart';
-import 'package:weather_app/features/weather/views/widgets/precipitation_card.dart';
-import 'package:weather_app/features/weather/views/widgets/rain_alert_card.dart';
-import 'package:weather_app/features/weather/views/widgets/sunrise_sunset_card.dart';
+import 'package:weather_app/features/weather/views/widgets/custom_error_widget.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
-import 'package:weather_app/features/weather/views/widgets/weather_details_grid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -71,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final isGpsOff = errorMsg.contains('disabled');
       final isDeniedForever = errorMsg.contains('permanently');
 
-      return _buildErrorWidget(
+      return CustomErrorWidget(
         icon: isGpsOff
             ? Icons.gps_off_rounded
             : (isDeniedForever
@@ -123,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'Exception: ',
           '',
         );
-        return _buildErrorWidget(
+        return CustomErrorWidget(
           icon: Icons.cloud_off_rounded,
           title: "Oops! We couldn't fetch the weather.",
           message: cleanMessage,
@@ -136,7 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         );
       }
-
       if (weatherState is WeatherLoading || weatherState is WeatherInitial) {
         return Skeletonizer(
           enabled: true,
