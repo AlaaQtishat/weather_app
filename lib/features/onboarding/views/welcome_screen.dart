@@ -11,6 +11,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: ContainerBackground(
         content: Padding(
@@ -29,14 +30,17 @@ class WelcomeScreen extends StatelessWidget {
                 "Welcome!",
                 style: TextStyle(
                   fontSize: 40.sp,
-                  color: Colors.black,
+                  //      color: Colors.black,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               SizedBox(height: 4),
               Text(
                 "Precise weather, beautifully presented.",
-                style: TextStyle(fontSize: 16.sp, color: Colors.black54),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: isDark ? Colors.grey : Colors.black54,
+                ),
               ),
               SizedBox(height: 48.h),
               CustomElevatedButton(

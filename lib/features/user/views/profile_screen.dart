@@ -10,6 +10,7 @@ import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/core/widgets/letter_widget.dart';
+import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_state.dart';
 import 'package:weather_app/features/user/views/widgets/notification_item_widget.dart';
@@ -22,6 +23,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: ContainerBackground(
         content: SingleChildScrollView(
@@ -207,12 +209,15 @@ class ProfileScreen extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
+                            backgroundColor: isDark
+                                ? AppTheme.primaryDarkBlue
+                                : Colors.white,
                             title: Text(
                               "Logout?",
 
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: AppTheme.primaryDarkBlue,
+                                // color: AppTheme.primaryDarkBlue,
                               ),
                             ),
                             content: Text("Are you sure you want to logout?"),
@@ -220,11 +225,17 @@ class ProfileScreen extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () {
                                   Navigator.pop(context);
+                                  context.read<RecentsCubit>().clearAll();
                                   context.read<AuthCubit>().logoutCubit();
                                 },
                                 child: authState is AuthLoading
-                                    ? const CircularProgressIndicator()
-                                    : Text("Yes"),
+                                    ? CircularProgressIndicator(
+                                        color: AppTheme.primaryBlue,
+                                      )
+                                    : Text(
+                                        "Yes",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
                                 ),
@@ -233,7 +244,10 @@ class ProfileScreen extends StatelessWidget {
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text("Cancel"),
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
                               ),
                             ],
                           ),

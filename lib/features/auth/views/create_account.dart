@@ -49,6 +49,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -138,7 +139,9 @@ class _CreateAccountState extends State<CreateAccount> {
                           context: context,
                           builder: (BuildContext context) {
                             return Dialog(
-                              backgroundColor: Colors.white,
+                              backgroundColor: isDark
+                                  ? AppTheme.primaryDarkBlue
+                                  : Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16.r),
                               ),
@@ -150,7 +153,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     colorScheme: ColorScheme.light(
                                       primary: AppTheme.primaryBlue,
                                       onPrimary: Colors.white,
-                                      onSurface: Colors.black87,
+                                      onSurface: Colors.grey,
                                     ),
                                   ),
                                   child: Column(
@@ -231,11 +234,10 @@ class _CreateAccountState extends State<CreateAccount> {
                           showPhoneCode: true,
                           countryListTheme: CountryListThemeData(
                             flagSize: 26.sp,
-                            backgroundColor: Colors.blueGrey.shade50,
-                            textStyle: TextStyle(
-                              fontSize: 16.sp,
-                              color: Colors.black87,
-                            ),
+                            backgroundColor: isDark
+                                ? AppTheme.primaryDarkBlue
+                                : Colors.white,
+                            textStyle: TextStyle(fontSize: 16.sp),
 
                             bottomSheetHeight: 500.h,
 
@@ -260,7 +262,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   width: 1,
-                                  color: Colors.grey.shade100,
+                                  color: Colors.grey,
                                 ),
                                 borderRadius: BorderRadius.circular(12.r),
                               ),
@@ -367,7 +369,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               fname: fnameController.text.trim(),
                               lname: lnameController.text.trim(),
                               birthdate: birthdateController.text,
-                              phoneNumber: finalPhoneNumber,
+                              phoneNumber: finalPhoneNumber ?? "Not provided",
                             );
 
                             context.read<AuthCubit>().registerCubit(
@@ -386,10 +388,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       children: [
                         const Text(
                           "Already have an account?",
-                          style: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextButton(
                           onPressed: () {
@@ -399,7 +398,11 @@ class _CreateAccountState extends State<CreateAccount> {
                           },
                           child: Text(
                             "Log in",
-                            style: TextStyle(color: AppTheme.primaryBlue),
+                            style: TextStyle(
+                              color: isDark
+                                  ? AppTheme.primaryLightBlue
+                                  : AppTheme.primaryBlue,
+                            ),
                           ),
                         ),
                       ],

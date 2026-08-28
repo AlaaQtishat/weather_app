@@ -55,7 +55,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         filled: true,
         fillColor: theme.cardColor,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Colors.grey.shade100),
+          borderSide: BorderSide(width: 0.5, color: Colors.grey.shade100),
           borderRadius: BorderRadius.circular(12.r),
         ),
         focusedBorder: OutlineInputBorder(
@@ -110,11 +110,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
                         widget.countryDialCode!,
                         style: TextStyle(
                           fontSize: 16.sp,
-                          color: Colors.black87,
+                          color: Colors.grey,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Icon(Icons.arrow_drop_down, color: Colors.grey.shade600),
+                      Icon(Icons.arrow_drop_down, color: Colors.grey),
                       SizedBox(width: 4.w),
 
                       Container(

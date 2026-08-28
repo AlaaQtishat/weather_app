@@ -45,7 +45,7 @@ class AppValidators {
     String countryCode,
   ) {
     if (val == null || val.trim().isEmpty) {
-      return "Phone number is required";
+      return null;
     }
 
     try {

@@ -56,6 +56,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -81,7 +82,9 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: 12.h),
                     Text(
                       "Enter your email and password to log in ",
-                      style: TextStyle(color: Colors.black54),
+                      style: TextStyle(
+                        color: isDark ? Colors.grey : Colors.black54,
+                      ),
                     ),
                     SizedBox(height: 32.h),
                     CustomTextField(
@@ -127,7 +130,7 @@ class _SignInState extends State<SignIn> {
                             Text(
                               "Remember me",
                               style: TextStyle(
-                                color: Colors.black45,
+                                color: isDark ? Colors.grey : Colors.black45,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16.sp,
                               ),
@@ -144,7 +147,11 @@ class _SignInState extends State<SignIn> {
                           },
                           child: Text(
                             "Forget Password?",
-                            style: TextStyle(color: AppTheme.primaryBlue),
+                            style: TextStyle(
+                              color: isDark
+                                  ? AppTheme.primaryLightBlue
+                                  : AppTheme.primaryBlue,
+                            ),
                           ),
                         ),
                       ],
@@ -202,7 +209,12 @@ class _SignInState extends State<SignIn> {
                       children: [
                         Expanded(child: Divider(color: Colors.grey.shade400)),
                         SizedBox(width: 12.w),
-                        Text("Or", style: TextStyle(color: Colors.black45)),
+                        Text(
+                          "Or",
+                          style: TextStyle(
+                            color: isDark ? Colors.grey : Colors.black45,
+                          ),
+                        ),
                         SizedBox(width: 12.w),
                         Expanded(child: Divider(color: Colors.grey.shade500)),
                       ],
@@ -232,8 +244,8 @@ class _SignInState extends State<SignIn> {
                       },
                       builder: (context, state) {
                         return CustomElevatedButton(
-                          backgroundColor: Colors.white,
-                          textColor: Colors.black,
+                          backgroundColor: Theme.of(context).cardColor,
+                          textColor: isDark ? Colors.white : Colors.black,
                           content: Row(
                             children: [
                               SizedBox(width: 32.w),
@@ -287,8 +299,8 @@ class _SignInState extends State<SignIn> {
                       },
                       builder: (context, state) {
                         return CustomElevatedButton(
-                          backgroundColor: Colors.white,
-                          textColor: Colors.black,
+                          backgroundColor: Theme.of(context).cardColor,
+                          textColor: isDark ? Colors.white : Colors.black,
                           content: Row(
                             children: [
                               SizedBox(width: 32.w),
@@ -328,10 +340,7 @@ class _SignInState extends State<SignIn> {
                       children: [
                         Text(
                           "Don't have an account?",
-                          style: TextStyle(
-                            color: Colors.black45,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextButton(
                           onPressed: () {
@@ -343,7 +352,11 @@ class _SignInState extends State<SignIn> {
                           },
                           child: Text(
                             "Sign Up",
-                            style: TextStyle(color: AppTheme.primaryBlue),
+                            style: TextStyle(
+                              color: isDark
+                                  ? AppTheme.primaryLightBlue
+                                  : AppTheme.primaryBlue,
+                            ),
                           ),
                         ),
                       ],

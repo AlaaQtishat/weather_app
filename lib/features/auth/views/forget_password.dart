@@ -27,6 +27,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -71,7 +72,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         textAlign: TextAlign.center,
                         "Don't worry! It happens. Please enter your email address to receive a reset link.",
                         style: TextStyle(
-                          color: Colors.black45,
+                          color: isDark ? Colors.grey : Colors.black45,
                           fontWeight: FontWeight.w500,
                           fontSize: 18.sp,
                         ),

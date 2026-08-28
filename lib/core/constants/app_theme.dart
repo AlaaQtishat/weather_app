@@ -86,10 +86,16 @@ class AppTheme {
       bodyMedium: TextStyle(color: Colors.white),
     ),
     cardColor: Colors.white.withOpacity(0.15),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xFF171717),
-        //   foregroundColor: darkGrey,
+        foregroundColor: Colors.white,
+        textStyle: TextStyle(fontSize: 16.sp),
+        backgroundColor: Color(0xFF2A6AE8),
+        shape: RoundedRectangleBorder(
+          side: BorderSide.none,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
       ),
     ),
     // iconButtonTheme: IconButtonThemeData(
