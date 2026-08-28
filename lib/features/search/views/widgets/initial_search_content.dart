@@ -34,7 +34,7 @@ class _InitialSearchContentState extends State<InitialSearchContent> {
             searchController: widget.searchController,
           ),
         ),
-        SizedBox(height: 24.h),
+        SizedBox(height: 32.h),
 
         BlocBuilder<RecentsCubit, RecentsState>(
           builder: (context, state) {

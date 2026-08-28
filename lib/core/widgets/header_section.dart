@@ -38,7 +38,7 @@ class _HeaderSectionState extends State<HeaderSection> {
     String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(now);
     final locationState = context.watch<LocationCubit>().state;
     final userState = context.watch<UserCubit>().state;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     String displayCity = "Unknown Location";
     if (locationState is LocationLoaded) {
       displayCity = locationState.cityName;
@@ -60,14 +60,14 @@ class _HeaderSectionState extends State<HeaderSection> {
                     ? const SizedBox()
                     : Icon(
                         Icons.pin_drop_outlined,
-                        color: AppTheme.secondaryDarkBlue,
+                        // color: AppTheme.secondaryDarkBlue,
                         size: 14.sp,
                       ),
                 widget.isHome ? const SizedBox() : SizedBox(width: 4.w),
                 Text(
                   widget.isHome ? formattedDate : displayCity,
                   style: TextStyle(
-                    color: AppTheme.secondaryDarkBlue,
+                    //  color: AppTheme.secondaryDarkBlue,
                     fontSize: 14.sp,
                   ),
                 ),
@@ -79,7 +79,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                     ? Icon(
                         Icons.my_location_outlined,
                         size: 16.sp,
-                        color: Colors.grey,
+                        //    color: Colors.grey,
                       )
                     : const SizedBox(),
                 widget.isHome ? SizedBox(width: 4.w) : const SizedBox(),
@@ -88,9 +88,9 @@ class _HeaderSectionState extends State<HeaderSection> {
                   if (locationState is LocationLoading ||
                       locationState is LocationInitial)
                     Skeletonizer(
-                      containersColor: AppTheme.primaryDarkBlue.withOpacity(
-                        0.12,
-                      ),
+                      containersColor: isDark
+                          ? Colors.white.withOpacity(0.06)
+                          : AppTheme.primaryDarkBlue.withOpacity(0.12),
                       child: Text(
                         "Loading City",
                         style: TextStyle(
@@ -110,7 +110,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                             : locationState.cityName.length <= 21
                             ? 22.sp
                             : 12.sp,
-                        color: AppTheme.primaryDarkBlue,
+                        //  color: AppTheme.primaryDarkBlue,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -128,7 +128,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                     "7-Day Forecast",
                     style: TextStyle(
                       fontSize: 22.sp,
-                      color: AppTheme.primaryDarkBlue,
+                      //      color: AppTheme.primaryDarkBlue,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

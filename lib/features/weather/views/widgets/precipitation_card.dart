@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
 
 class PrecipitationCard extends StatelessWidget {
@@ -8,6 +9,7 @@ class PrecipitationCard extends StatelessWidget {
   const PrecipitationCard({super.key, required this.hourlyData});
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (hourlyData.isEmpty) return const SizedBox();
     final next6Hours = hourlyData.take(6).toList();
 
@@ -27,7 +29,7 @@ class PrecipitationCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.bold,
-            color: const Color(0xFF1E2432),
+            color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
             letterSpacing: 1.2,
           ),
         ),
@@ -35,15 +37,18 @@ class PrecipitationCard extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
             borderRadius: BorderRadius.circular(20.r),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, 5),
-              ),
+            boxShadow: [
+              isDark
+                  ? BoxShadow(color: Colors.transparent)
+                  : BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
             ],
+            border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

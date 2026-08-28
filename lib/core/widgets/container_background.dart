@@ -7,10 +7,15 @@ class ContainerBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       height: double.infinity,
       width: double.infinity,
-      decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
+      decoration: BoxDecoration(
+        gradient: isDark
+            ? AppTheme.darkScaffoldGradient
+            : AppTheme.lightScaffoldGradient,
+      ),
       child: content,
     );
   }

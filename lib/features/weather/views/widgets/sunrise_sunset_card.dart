@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'dart:math';
 import 'dart:async';
 
+import 'package:weather_app/core/constants/app_theme.dart';
+
 class SunriseSunsetCard extends StatefulWidget {
   final int sunriseTimestamp;
   final int sunsetTimestamp;
@@ -42,6 +44,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     if (widget.sunriseTimestamp == 0 || widget.sunsetTimestamp == 0) {
       return const SizedBox();
     }
@@ -55,69 +58,89 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
 
     final timeFormat = DateFormat('HH:mm');
 
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 5),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "SUN",
+          style: TextStyle(
+            fontSize: 13.sp,
+            fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
+            letterSpacing: 1.2,
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+        ),
+        SizedBox(height: 12.sp),
+        Container(
+          padding: EdgeInsets.all(20.w),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
+            borderRadius: BorderRadius.circular(20.r),
+            boxShadow: [
+              isDark
+                  ? BoxShadow(color: Colors.transparent)
+                  : BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+            ],
+            border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 6.w,
-                height: 6.w,
-                decoration: const BoxDecoration(
-                  color: Colors.amber,
-                  shape: BoxShape.circle,
+              Row(
+                children: [
+                  Container(
+                    width: 6.w,
+                    height: 6.w,
+                    decoration: const BoxDecoration(
+                      color: Colors.amber,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Text(
+                    "SUNRISE & SUNSET",
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.bold,
+                      color: isDark
+                          ? Colors.white70
+                          : AppTheme.secondaryDarkBlue,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+
+              SizedBox(
+                height: 70.h,
+                width: double.infinity,
+                child: CustomPaint(
+                  painter: SunArcPainter(
+                    sunrise: sunrise,
+                    sunset: sunset,
+                    now: now,
+                  ),
                 ),
               ),
-              SizedBox(width: 8.w),
-              Text(
-                "SUNRISE & SUNSET",
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.bold,
-                  color: const Color(0xFF1E2432),
-                  letterSpacing: 1.2,
-                ),
+
+              SizedBox(height: 12.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildTimeColumn("SUNRISE", timeFormat.format(sunrise)),
+                  _buildTimeColumn("NOW", timeFormat.format(now)),
+                  _buildTimeColumn("SUNSET", timeFormat.format(sunset)),
+                ],
               ),
             ],
           ),
-          SizedBox(height: 30.h),
-
-          SizedBox(
-            height: 70.h,
-            width: double.infinity,
-            child: CustomPaint(
-              painter: SunArcPainter(
-                sunrise: sunrise,
-                sunset: sunset,
-                now: now,
-              ),
-            ),
-          ),
-
-          SizedBox(height: 12.h),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTimeColumn("SUNRISE", timeFormat.format(sunrise)),
-              _buildTimeColumn("NOW", timeFormat.format(now)),
-              _buildTimeColumn("SUNSET", timeFormat.format(sunset)),
-            ],
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -137,7 +160,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
           time,
           style: TextStyle(
             fontSize: 16.sp,
-            color: const Color(0xFF1E2432),
+            //   color: const Color(0xFF1E2432),
             fontWeight: FontWeight.bold,
           ),
         ),

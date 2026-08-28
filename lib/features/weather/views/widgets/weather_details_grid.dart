@@ -10,6 +10,7 @@ class WeatherDetailsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final visibilityKm = (currentData.visibility / 1000).toStringAsFixed(0);
 
     return Column(
@@ -20,7 +21,7 @@ class WeatherDetailsGrid extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.bold,
-            color: AppTheme.primaryDarkBlue,
+            color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
             letterSpacing: 1.2,
           ),
         ),

@@ -31,7 +31,9 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
       backgroundColor: Colors.transparent,
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(color: Color(0xFFE3ECFB)),
+        decoration: BoxDecoration(
+          color: isDark ? Color(0xFF1A1E3A) : Color(0xFFE3ECFB),
+        ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           elevation: 0,

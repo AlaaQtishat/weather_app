@@ -8,37 +8,49 @@ class RainAlertCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.blue.shade100),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
+        boxShadow: [
+          isDark
+              ? BoxShadow(color: Colors.transparent)
+              : BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
         ],
+        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
         child: Row(
           children: [
-            Icon(Icons.umbrella, color: Colors.purple, size: 28.w),
+            Icon(Icons.umbrella, color: Colors.purpleAccent, size: 28.w),
             SizedBox(width: 12.w),
             Expanded(
               child: RichText(
                 text: TextSpan(
                   style: TextStyle(
                     fontSize: 13.sp,
-                    color: AppTheme.primaryDarkBlue,
+                    //  color: AppTheme.primaryDarkBlue,
                   ),
                   children: [
-                    const TextSpan(
+                    TextSpan(
                       text: "Grab an umbrella. ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : AppTheme.primaryDarkBlue,
+                      ),
                     ),
                     TextSpan(
                       text:
                           "Rain expected through the afternoon — $rainValue mm in the last hour.",
-                      style: const TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: isDark ? Colors.white70 : Colors.black38,
+                      ),
                     ),
                   ],
                 ),

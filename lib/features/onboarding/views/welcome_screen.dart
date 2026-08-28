@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/onboarding/services/seen_prefs.dart';
@@ -11,10 +12,8 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
-        child: Padding(
+      body: ContainerBackground(
+        content: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

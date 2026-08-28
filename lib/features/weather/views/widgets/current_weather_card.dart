@@ -18,19 +18,23 @@ class CurrentWeatherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //final isSkeleton = Skeletonizer.of(context).enabled;
-
+    final theme = Theme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
         borderRadius: BorderRadius.circular(20.r),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            offset: Offset(0, 5),
-          ),
+        boxShadow: [
+          isDark
+              ? BoxShadow(color: Colors.transparent)
+              : BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
         ],
+        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,7 +66,6 @@ class CurrentWeatherCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 48.sp,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryDarkBlue,
                   ),
                 ),
                 Text(
@@ -76,7 +79,6 @@ class CurrentWeatherCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
-                    color: AppTheme.primaryDarkBlue,
                     height: 1.2,
                   ),
                 ),
@@ -85,15 +87,9 @@ class CurrentWeatherCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(
-                      "↑ ${todayData.temp.max?.round() ?? '--'}°",
-                      style: const TextStyle(color: Colors.grey),
-                    ),
+                    Text("↑ ${todayData.temp.max?.round() ?? '--'}°"),
                     SizedBox(width: 10.w),
-                    Text(
-                      "↓ ${todayData.temp.min?.round() ?? '--'}°",
-                      style: const TextStyle(color: Colors.grey),
-                    ),
+                    Text("↓ ${todayData.temp.min?.round() ?? '--'}°"),
                   ],
                 ),
                 SizedBox(height: 12.h),
@@ -104,12 +100,14 @@ class CurrentWeatherCard extends StatelessWidget {
                     vertical: 6.h,
                   ),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryDarkBlue,
+                    color: isDark
+                        ? Colors.white.withOpacity(0.08)
+                        : AppTheme.secondaryDarkBlue,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Text(
                     "Feels ${currentData.feelsLike.current.round()}°",
-                    style: TextStyle(color: Colors.white, fontSize: 12.sp),
+                    style: TextStyle(fontSize: 13.sp, color: Colors.white),
                   ),
                 ),
               ],

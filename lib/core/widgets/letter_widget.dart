@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:weather_app/core/constants/app_theme.dart';
 
 class LetterWidget extends StatelessWidget {
   final String letter;
@@ -12,17 +13,18 @@ class LetterWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: isProfileScreen ? 120.r : 60.r,
       height: isProfileScreen ? 120.r : 60.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFF5A80D8), Color(0xFF293865)],
-        ),
-        border: Border.all(color: const Color(0xFF4A68B0), width: 3.w),
+        gradient: isDark
+            ? AppTheme.darkLetterWidget
+            : AppTheme.lightLetterWidget,
+        border: isDark
+            ? Border()
+            : Border.all(color: const Color(0xFF4A68B0), width: 3.w),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.15),

@@ -33,6 +33,7 @@ class WeatherContent extends StatelessWidget {
   final DateTime now = DateTime.now();
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     String formattedDate = DateFormat('EEEE, d MMMM yyyy').format(now);
     final rainValue = currentData.rain?.h1 ?? 0.0;
     final bool showRainAlert = rainValue > 0;
@@ -59,7 +60,9 @@ class WeatherContent extends StatelessWidget {
                           icon: Icon(
                             Icons.close,
                             size: 28.sp,
-                            color: AppTheme.primaryDarkBlue,
+                            color: isDark
+                                ? Colors.white70
+                                : AppTheme.primaryDarkBlue,
                           ),
                         ),
 
@@ -72,7 +75,9 @@ class WeatherContent extends StatelessWidget {
                               Text(
                                 formattedDate,
                                 style: TextStyle(
-                                  color: AppTheme.secondaryDarkBlue,
+                                  color: isDark
+                                      ? Colors.white70
+                                      : AppTheme.secondaryDarkBlue,
                                   fontSize: 14.sp,
                                 ),
                               ),
@@ -100,7 +105,6 @@ class WeatherContent extends StatelessWidget {
                                           cityName!,
                                           style: TextStyle(
                                             fontSize: 24.sp,
-                                            color: AppTheme.primaryDarkBlue,
                                             fontWeight: FontWeight.bold,
                                             height: 1.2,
                                           ),
@@ -112,7 +116,9 @@ class WeatherContent extends StatelessWidget {
                                           country!,
                                           style: TextStyle(
                                             fontSize: 16.sp,
-                                            color: AppTheme.secondaryDarkBlue,
+                                            color: isDark
+                                                ? Colors.white70
+                                                : AppTheme.secondaryDarkBlue,
                                             fontWeight: FontWeight.w500,
                                           ),
                                           maxLines: 1,

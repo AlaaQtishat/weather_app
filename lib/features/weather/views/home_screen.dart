@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final locationState = context.watch<LocationCubit>().state;
     final weatherState = context.watch<WeatherCubit>().state;
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: ContainerBackground(
         content: BlocListener<LocationCubit, LocationState>(
@@ -177,57 +177,5 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return const SizedBox();
-  }
-
-  Widget _buildErrorWidget({
-    required IconData icon,
-    required String title,
-    required String message,
-    required String buttonText,
-    required VoidCallback onPressed,
-  }) {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 30.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 80.w, color: Colors.grey),
-            SizedBox(height: 16.h),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF1E2432),
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey),
-            ),
-            SizedBox(height: 24.h),
-            ElevatedButton.icon(
-              onPressed: onPressed,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF1E2432),
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-              ),
-              icon: const Icon(Icons.refresh, color: Colors.white),
-              label: Text(
-                buttonText,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

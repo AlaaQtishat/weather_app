@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/onboarding/services/seen_prefs.dart';
@@ -29,9 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
-        child: Center(
+      body: ContainerBackground(
+        content: Center(
           child: Image.asset(
             "assets/images/welcome_img.png",
             height: 180,

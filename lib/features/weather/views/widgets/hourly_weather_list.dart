@@ -12,6 +12,7 @@ class HourlyWeatherList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       children: [
         Row(
@@ -22,7 +23,7 @@ class HourlyWeatherList extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.primaryDarkBlue,
+                color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
                 letterSpacing: 1.2,
               ),
             ),
@@ -35,9 +36,14 @@ class HourlyWeatherList extends StatelessWidget {
               child: Text(
                 "7-day forecast",
                 style: TextStyle(
+                  decorationColor: isDark
+                      ? AppTheme.primaryLightBlue
+                      : AppTheme.primaryBlue,
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppTheme.primaryBlue,
+                  color: isDark
+                      ? AppTheme.primaryLightBlue
+                      : AppTheme.primaryBlue,
                   decoration: TextDecoration.underline,
                 ),
               ),
@@ -71,18 +77,28 @@ class HourlyWeatherList extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 6.w),
                 decoration: BoxDecoration(
                   color: isNow
-                      ? Colors.blue.shade50
+                      ? isDark
+                            ? Color(0xFF7AB3E0).withOpacity(0.25)
+                            : Colors.blue.shade50
+                      : isDark
+                      ? Colors.white.withOpacity(0.15)
                       : Colors.white.withOpacity(0.9),
                   borderRadius: BorderRadius.circular(20.r),
                   border: isNow
-                      ? Border.all(color: Colors.blue.shade400, width: 1.5)
+                      ? isDark
+                            ? BoxBorder.all(color: Color(0xFF48618A), width: 2)
+                            : Border.all(color: Colors.blue.shade400, width: 2)
+                      : isDark
+                      ? BoxBorder.all(color: Colors.white24)
                       : Border.all(color: Colors.grey.shade200),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
+                  boxShadow: [
+                    isDark
+                        ? BoxShadow(color: Colors.transparent)
+                        : BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            offset: Offset(0, 1),
+                          ),
                   ],
                 ),
                 child: Column(
@@ -92,7 +108,11 @@ class HourlyWeatherList extends StatelessWidget {
                       timeText,
                       style: TextStyle(
                         fontSize: 11.sp,
-                        color: isNow ? Colors.blue.shade700 : Colors.grey,
+                        color: isNow
+                            ? isDark
+                                  ? AppTheme.primaryLightBlue
+                                  : Colors.blue.shade700
+                            : Colors.grey,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -110,7 +130,7 @@ class HourlyWeatherList extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
-                        color: const Color(0xFF1E2432),
+                        // color: const Color(0xFF1E2432),
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -118,7 +138,11 @@ class HourlyWeatherList extends StatelessWidget {
                       "${item.humidity}%",
                       style: TextStyle(
                         fontSize: 10.sp,
-                        color: isNow ? Colors.blue.shade300 : Colors.grey,
+                        color: isNow
+                            ? isDark
+                                  ? AppTheme.primaryLightBlue
+                                  : Colors.blue.shade300
+                            : Colors.grey,
                       ),
                     ),
                   ],

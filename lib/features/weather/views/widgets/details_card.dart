@@ -17,14 +17,22 @@ class DetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
         borderRadius: BorderRadius.circular(20.r),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 5, offset: Offset(0, 3)),
+        boxShadow: [
+          isDark
+              ? BoxShadow(color: Colors.transparent)
+              : BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
         ],
+        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +43,7 @@ class DetailsCard extends StatelessWidget {
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w900,
-              color: AppTheme.secondaryDarkBlue,
+              color: isDark ? Colors.white70 : AppTheme.secondaryDarkBlue,
             ),
           ),
           SizedBox(height: 6.h),
@@ -46,13 +54,13 @@ class DetailsCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
-                  color: AppTheme.primaryDarkBlue,
+                  // color: AppTheme.primaryDarkBlue,
                 ),
               ),
               SizedBox(width: 8.w),
               Text(
                 measurement,
-                style: TextStyle(fontSize: 20.sp, color: Colors.grey),
+                style: TextStyle(fontSize: 18.sp, color: Colors.grey),
               ),
             ],
           ),
@@ -61,7 +69,7 @@ class DetailsCard extends StatelessWidget {
             subtitle,
             style: TextStyle(
               fontSize: 12.sp,
-              color: AppTheme.secondaryDarkBlue,
+              color: isDark ? Colors.white70 : AppTheme.secondaryDarkBlue,
             ),
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/app_validators.dart';
+import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
@@ -60,12 +61,8 @@ class _SignInState extends State<SignIn> {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-
-          decoration: BoxDecoration(gradient: AppTheme.scaffoldGradient),
-          child: SingleChildScrollView(
+        body: ContainerBackground(
+          content: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: Form(

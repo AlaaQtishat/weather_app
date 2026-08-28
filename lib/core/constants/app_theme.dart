@@ -8,16 +8,32 @@ class AppTheme {
   static final Color darkSelected = Colors.white;
   static final Color primaryBlue = Color(0xFF2A6AE8);
   static final Color primaryDarkBlue = Color(0xFF1F243E);
-  static final Color secondaryDarkBlue = Color(0xFF3A5A8A);
-  static final RadialGradient scaffoldGradient = RadialGradient(
+  static final Color secondaryDarkBlue = Color(0xFF2B4368);
+  static final Color primaryLightBlue = Color(0xFF7AB3E0);
+  static final RadialGradient lightScaffoldGradient = RadialGradient(
     center: Alignment.topRight,
     radius: 1.0,
-    colors: [
-      Color(0xFF93BBFB),
-      HSLColor.fromAHSL(1.0, 217, 0.62, 0.96).toColor(),
-    ],
+    colors: [Color(0xFF5A98FC), Color(0xFFEEF3FB)],
+  );
+
+  static const LinearGradient darkScaffoldGradient = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    colors: [Color(0xFF2D68FF), Color(0xFF1A1E3A), Color(0xFF1A1E3A)],
+    stops: [0.0, 0.30, 1.0],
+  );
+  static const lightLetterWidget = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF5A80D8), Color(0xFF293865)],
+  );
+  static const darkLetterWidget = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF7AB3E0), Color(0xFFA88ADB)],
   );
   static final lightTheme = ThemeData(
+    iconTheme: IconThemeData(color: secondaryDarkBlue),
     brightness: Brightness.light,
     scaffoldBackgroundColor: Colors.transparent,
     textButtonTheme: TextButtonThemeData(
@@ -28,9 +44,9 @@ class AppTheme {
       ),
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Color(0xFF1D293D)),
-      bodySmall: TextStyle(color: Color(0xFF1D293D)),
-      bodyMedium: TextStyle(color: Color(0xFF1D293D)),
+      bodyLarge: TextStyle(color: Color(0xFF1F243E)),
+      bodySmall: TextStyle(color: Color(0xFF1F243E)),
+      bodyMedium: TextStyle(color: Color(0xFF1F243E)),
     ),
     cardColor: Colors.white,
 
@@ -65,11 +81,11 @@ class AppTheme {
       ),
     ),
     textTheme: const TextTheme(
-      bodyLarge: TextStyle(color: Colors.white70),
+      bodyLarge: TextStyle(color: Colors.white),
       bodySmall: TextStyle(color: Colors.white70),
-      bodyMedium: TextStyle(color: Colors.white70),
+      bodyMedium: TextStyle(color: Colors.white),
     ),
-    cardColor: Color(0xFF2A2E48),
+    cardColor: Colors.white.withOpacity(0.15),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF171717),
