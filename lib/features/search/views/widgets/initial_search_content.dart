@@ -25,6 +25,7 @@ class _InitialSearchContentState extends State<InitialSearchContent> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,7 +60,9 @@ class _InitialSearchContentState extends State<InitialSearchContent> {
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.5,
-                          color: AppTheme.primaryDarkBlue,
+                          color: isDark
+                              ? Colors.white70
+                              : AppTheme.primaryDarkBlue,
                         ),
                       ),
 
@@ -108,12 +111,16 @@ class _InitialSearchContentState extends State<InitialSearchContent> {
                           leading: Container(
                             padding: EdgeInsets.all(10.w),
                             decoration: BoxDecoration(
-                              color: AppTheme.primaryDarkBlue.withOpacity(0.06),
+                              color: isDark
+                                  ? AppTheme.primaryBlue.withOpacity(0.06)
+                                  : AppTheme.primaryDarkBlue.withOpacity(0.06),
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Icon(
                               Icons.history_rounded,
-                              color: AppTheme.primaryDarkBlue,
+                              color: isDark
+                                  ? Colors.white70
+                                  : AppTheme.secondaryDarkBlue,
                               size: 22.sp,
                             ),
                           ),
@@ -122,7 +129,7 @@ class _InitialSearchContentState extends State<InitialSearchContent> {
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
-                              color: AppTheme.primaryDarkBlue,
+                              // color: AppTheme.primaryDarkBlue,
                             ),
                           ),
                           subtitle: Text(

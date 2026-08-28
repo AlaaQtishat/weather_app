@@ -10,6 +10,7 @@ class PrecipitationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     if (hourlyData.isEmpty) return const SizedBox();
     final next6Hours = hourlyData.take(6).toList();
 
@@ -37,7 +38,7 @@ class PrecipitationCard extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 16.w),
           decoration: BoxDecoration(
-            color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               isDark

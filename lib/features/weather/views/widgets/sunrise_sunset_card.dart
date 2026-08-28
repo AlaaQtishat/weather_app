@@ -45,6 +45,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     if (widget.sunriseTimestamp == 0 || widget.sunsetTimestamp == 0) {
       return const SizedBox();
     }
@@ -74,7 +75,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
         Container(
           padding: EdgeInsets.all(20.w),
           decoration: BoxDecoration(
-            color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
+            color: theme.cardColor,
             borderRadius: BorderRadius.circular(20.r),
             boxShadow: [
               isDark

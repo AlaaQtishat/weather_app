@@ -13,6 +13,7 @@ class HourlyWeatherList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     return Column(
       children: [
         Row(
@@ -80,9 +81,7 @@ class HourlyWeatherList extends StatelessWidget {
                       ? isDark
                             ? Color(0xFF7AB3E0).withOpacity(0.25)
                             : Colors.blue.shade50
-                      : isDark
-                      ? Colors.white.withOpacity(0.15)
-                      : Colors.white.withOpacity(0.9),
+                      : theme.cardColor,
                   borderRadius: BorderRadius.circular(20.r),
                   border: isNow
                       ? isDark

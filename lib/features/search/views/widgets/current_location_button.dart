@@ -15,6 +15,7 @@ class CurrentLocationButton extends StatelessWidget {
   // RecentsService recentsService = RecentsService();
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final locationState = context.watch<LocationCubit>().state;
     final isLoading = locationState is LocationLoading;
 
@@ -71,14 +72,22 @@ class CurrentLocationButton extends StatelessWidget {
               ),
             )
           else
-            Icon(Icons.my_location, color: AppTheme.primaryBlue, size: 20.sp),
+            Icon(
+              Icons.my_location,
+              color: isDark ? Colors.white70 : AppTheme.secondaryDarkBlue,
+              size: 20.sp,
+            ),
 
           SizedBox(width: 8.w),
 
           Text(
             "Use my current location",
             style: TextStyle(
-              color: isLoading ? Colors.grey : AppTheme.secondaryDarkBlue,
+              color: isLoading
+                  ? Colors.grey
+                  : isDark
+                  ? Colors.white70
+                  : AppTheme.secondaryDarkBlue,
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               decoration: TextDecoration.underline,

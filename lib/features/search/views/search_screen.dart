@@ -84,6 +84,7 @@ class SearchHeaderTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -92,14 +93,17 @@ class SearchHeaderTitle extends StatelessWidget {
           style: TextStyle(
             fontSize: 36.sp,
             fontWeight: FontWeight.bold,
-            color: AppTheme.primaryDarkBlue,
+
             height: 1.2,
           ),
         ),
         SizedBox(height: 6.h),
         Text(
           "Search anywhere in the world",
-          style: TextStyle(fontSize: 15.sp, color: AppTheme.secondaryDarkBlue),
+          style: TextStyle(
+            fontSize: 15.sp,
+            color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
+          ),
         ),
       ],
     );

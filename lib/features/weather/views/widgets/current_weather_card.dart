@@ -23,7 +23,7 @@ class CurrentWeatherCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           isDark

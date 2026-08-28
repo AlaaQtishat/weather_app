@@ -18,10 +18,11 @@ class DetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           isDark

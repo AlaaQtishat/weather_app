@@ -9,9 +9,10 @@ class RainAlertCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? Colors.white.withOpacity(0.15) : Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           isDark
