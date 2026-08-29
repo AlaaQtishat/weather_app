@@ -226,7 +226,7 @@ class _SignInState extends State<SignIn> {
                         if (state is AuthSuccess) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text("Signed in Successfully!"),
+                              content: Text("Signed in successfully!"),
                             ),
                           );
 

@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/features/search/services/recents_service.dart';
-import 'package:weather_app/features/search/cubit/recents_state.dart'; // تأكدي من المسار
+import 'package:weather_app/features/search/cubit/recents_state.dart';
 
 class RecentsCubit extends Cubit<RecentsState> {
   final RecentsService _recentsService = RecentsService();

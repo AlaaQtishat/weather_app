@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
-import 'package:weather_app/features/search/services/recents_service.dart';
+import 'package:weather_app/features/search/models/search_result_model.dart';
 import 'package:weather_app/features/weather/views/city_weather_screen.dart';
 
 class SearchResultsList extends StatelessWidget {
-  final List<dynamic> results;
+  final List<SearchResultModel> results;
   final TextEditingController searchController;
 
   SearchResultsList({
@@ -16,7 +16,7 @@ class SearchResultsList extends StatelessWidget {
     required this.results,
     required this.searchController,
   });
-  // RecentsService recentsService = RecentsService();
+
   @override
   Widget build(BuildContext context) {
     if (results.isEmpty) {
@@ -44,8 +44,8 @@ class SearchResultsList extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: results.length,
         itemBuilder: (context, index) {
-          final cityName = results[index].name.toString();
-          final countryCode = results[index].country.toString();
+          final cityName = results[index].name;
+          final countryCode = results[index].countryCode;
           final country = CountryService().findByCode(countryCode);
           final fullCountryName = country?.name ?? countryCode;
           final flagEmoji = country?.flagEmoji ?? '📍';

@@ -182,17 +182,21 @@ class ProfileScreen extends StatelessWidget {
 
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, authState) {
-                    if (ModalRoute.of(context)?.isCurrent != true) return;
-                    if (authState is AuthSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                    if (authState is AuthInitial) {
+                      final messenger = ScaffoldMessenger.of(context);
+                      final navigator = Navigator.of(context);
+
+                      messenger.clearSnackBars();
+
+                      navigator.pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => SignIn()),
+                        (Route<dynamic> route) => false,
+                      );
+
+                      messenger.showSnackBar(
                         const SnackBar(
                           content: Text("signed out successfully!"),
                         ),
-                      );
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignIn()),
                       );
                     } else if (authState is AuthError) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -200,6 +204,25 @@ class ProfileScreen extends StatelessWidget {
                       );
                     }
                   },
+                  // listener: (context, authState) {
+                  //   if (authState is AuthInitial) {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       const SnackBar(
+                  //         content: Text("signed out successfully!"),
+                  //       ),
+                  //     );
+                  //
+                  //     Navigator.pushAndRemoveUntil(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => SignIn()),
+                  //       (Route<dynamic> route) => false,
+                  //     );
+                  //   } else if (authState is AuthError) {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(content: Text(authState.errorMessage)),
+                  //     );
+                  //   }
+                  // },
                   builder: (context, authState) {
                     return GestureDetector(
                       onTap: () {
@@ -229,9 +252,7 @@ class ProfileScreen extends StatelessWidget {
                                   context.read<AuthCubit>().logoutCubit();
                                 },
                                 child: authState is AuthLoading
-                                    ? CircularProgressIndicator(
-                                        color: AppTheme.primaryBlue,
-                                      )
+                                    ? CircularProgressIndicator()
                                     : Text(
                                         "Yes",
                                         style: TextStyle(color: Colors.white),

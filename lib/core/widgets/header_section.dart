@@ -155,9 +155,12 @@ class _HeaderSectionState extends State<HeaderSection> {
                 size: 20.sp,
               ),
             ),
-          )
-        else
-          Skeletonizer(child: const LetterWidget(letter: "A")),
+          ),
+        // else
+        //   Skeletonizer(
+        //
+        //     child: const LetterWidget(letter: "A"),
+        //   ),
       ],
     );
   }

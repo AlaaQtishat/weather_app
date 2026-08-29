@@ -40,17 +40,11 @@ class LocationService {
 
       if (placemarks.isNotEmpty) {
         Placemark place = placemarks.first;
-
         String area = place.subLocality ?? '';
         String city = place.locality ?? place.administrativeArea ?? '';
 
-        if (area.isNotEmpty && city.isNotEmpty) {
-          return '$city, $area.';
-        } else if (city.isNotEmpty) {
-          return city;
-        } else {
-          return 'Unknown Location';
-        }
+        if (area.isNotEmpty && city.isNotEmpty) return '$city, $area.';
+        if (city.isNotEmpty) return city;
       }
       return 'Unknown Location';
     } catch (e) {
@@ -67,14 +61,7 @@ class LocationService {
       );
 
       if (placemarks.isNotEmpty) {
-        Placemark place = placemarks.first;
-
-        String country = place.country ?? "";
-        if (country.isNotEmpty) {
-          return country;
-        } else {
-          return '';
-        }
+        return placemarks.first.country ?? '';
       }
       return '';
     } catch (e) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
@@ -87,7 +86,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (locationState is LocationLoading || locationState is LocationInitial) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
       return Skeletonizer(
+        effect: ShimmerEffect(
+          baseColor: isDark ? const Color(0xFF2A2E4A) : Colors.grey.shade300,
+          highlightColor: isDark
+              ? const Color(0xFF3A3F5F)
+              : Colors.grey.shade100,
+        ),
         enabled: true,
         child: WeatherContent(
           onRefresh: () async {
@@ -131,7 +137,14 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
       if (weatherState is WeatherLoading || weatherState is WeatherInitial) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
         return Skeletonizer(
+          effect: ShimmerEffect(
+            baseColor: isDark ? const Color(0xFF2A2E4A) : Colors.grey.shade300,
+            highlightColor: isDark
+                ? const Color(0xFF3A3F5F)
+                : Colors.grey.shade100,
+          ),
           enabled: true,
           child: WeatherContent(
             onRefresh: () async {

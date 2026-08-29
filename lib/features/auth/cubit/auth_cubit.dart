@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
@@ -84,12 +86,10 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading(loadingSource: "logout"));
     try {
       await authService.logout();
-      emit(AuthSuccess());
+      emit(AuthInitial());
     } on FirebaseAuthException catch (e, st) {
-      print("FirebaseAuthException in logout: ${e.message} , $st");
       emit(AuthError(errorMessage: e.message ?? "Logout failed"));
     } catch (e, st) {
-      print("Unexpected error in logout: ${e.toString()} , $st");
       emit(
         AuthError(
           errorMessage: "Something went wrong, please try again later.",
