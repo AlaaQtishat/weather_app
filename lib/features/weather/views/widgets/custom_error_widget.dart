@@ -20,6 +20,7 @@ class CustomErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -34,7 +35,7 @@ class CustomErrorWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
-                color: AppTheme.primaryDarkBlue,
+                color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
               ),
             ),
             SizedBox(height: 8.h),
@@ -47,16 +48,21 @@ class CustomErrorWidget extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: onPressed,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryDarkBlue,
+                backgroundColor: isDark
+                    ? Colors.white70
+                    : AppTheme.primaryDarkBlue,
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.r),
                 ),
               ),
-              icon: const Icon(Icons.refresh, color: Colors.white),
+              icon: Icon(
+                Icons.refresh,
+                color: isDark ? Colors.black : Colors.white,
+              ),
               label: Text(
                 buttonText,
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: isDark ? Colors.black : Colors.white),
               ),
             ),
           ],

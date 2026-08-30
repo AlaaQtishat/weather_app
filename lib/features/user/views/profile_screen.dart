@@ -13,10 +13,8 @@ import 'package:weather_app/core/widgets/letter_widget.dart';
 import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_state.dart';
-import 'package:weather_app/features/user/views/widgets/notification_item_widget.dart';
-import 'package:weather_app/features/user/views/widgets/preference_item_widget.dart';
+import 'package:weather_app/features/user/views/widgets/profile_tile_widget.dart';
 import 'package:weather_app/features/user/views/widgets/profile_card_widget.dart';
-import 'package:weather_app/features/user/views/widgets/stats_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -46,34 +44,20 @@ class ProfileScreen extends StatelessWidget {
                           Text(
                             "${user.fname} ${user.lname}",
                             style: TextStyle(
-                              color: AppTheme.primaryDarkBlue,
+                              //     color: AppTheme.primaryDarkBlue,
                               fontWeight: FontWeight.w800,
-                              fontSize: 24.sp,
+                              fontSize: 32.sp,
                             ),
                           ),
-                          SizedBox(height: 4.h),
+                          SizedBox(height: 2.h),
                           Text(
                             user.email,
                             style: TextStyle(
-                              color: const Color(0xFF7B8BA4),
-                              fontSize: 14.sp,
+                              color: isDark
+                                  ? Colors.white70
+                                  : AppTheme.secondaryDarkBlue,
+                              fontSize: 16.sp,
                             ),
-                          ),
-                          BlocBuilder<ThemeCubit, ThemeState>(
-                            builder: (context, state) {
-                              bool isDarkMode =
-                                  state.themeMode == ThemeMode.dark;
-
-                              return Switch(
-                                value: isDarkMode,
-                                activeColor: AppTheme.primaryBlue,
-                                onChanged: (newValue) {
-                                  context.read<ThemeCubit>().toggleTheme(
-                                    newValue,
-                                  );
-                                },
-                              );
-                            },
                           ),
                         ],
                       );
@@ -93,11 +77,6 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 SizedBox(height: 24.h),
-
-                StatsWidget(),
-
-                SizedBox(height: 32.h),
-
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -106,197 +85,172 @@ class ProfileScreen extends StatelessWidget {
                       letterSpacing: 1.2,
                       fontWeight: FontWeight.w700,
                       fontSize: 12.sp,
-                      color: AppTheme.primaryDarkBlue,
+                      // color: AppTheme.primaryDarkBlue,
                     ),
                   ),
                 ),
                 SizedBox(height: 12.h),
                 ProfileCardWidget(
                   items: [
-                    PreferenceItemWidget(
+                    ProfileTileWidget(
+                      isPreference: true,
                       img: "assets/images/temperature.png",
                       imgBgColor: const Color(0xFFFDECEE),
                       title: "Temperature",
-                      trailingText: "Celsius",
+                      trailingWidget: Text(
+                        "Celsius",
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          // color: const Color(0xFF7B8BA4),
+                        ),
+                      ),
                     ),
-                    PreferenceItemWidget(
-                      img: "assets/images/wind.png",
-                      imgBgColor: const Color(0xFFE3F0FC),
-                      title: "Wind Speed",
-                      trailingText: "m/s",
-                    ),
-                    PreferenceItemWidget(
+
+                    ProfileTileWidget(
+                      isPreference: true,
                       img: "assets/images/time.png",
                       imgBgColor: const Color(0xFFF1F4F9),
                       title: "Time Format",
-                      trailingText: "24h",
-                    ),
-                    PreferenceItemWidget(
-                      img: "assets/images/pin.png",
-                      imgBgColor: const Color(0xFFFDECEE),
-                      title: "Home Location",
-                      trailingText: "Turin, IT",
+                      trailingWidget: Text(
+                        "24h",
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          // color: const Color(0xFF7B8BA4),
+                        ),
+                      ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 32.h),
-
+                SizedBox(height: 24.h),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "NOTIFICATIONS",
+                    "SETTINGS",
                     style: TextStyle(
                       letterSpacing: 1.2,
                       fontWeight: FontWeight.w700,
                       fontSize: 12.sp,
-                      color: AppTheme.primaryDarkBlue,
+                      //      color: AppTheme.primaryDarkBlue,
                     ),
                   ),
                 ),
                 SizedBox(height: 12.h),
                 ProfileCardWidget(
                   items: [
-                    NotificationItemWidget(
-                      img: "assets/images/severse.png",
-                      imgBgColor: const Color(0xFFFFF4E5),
-                      title: "Severe Alerts",
-                      switchValue: true,
+                    ProfileTileWidget(
+                      img: isDark
+                          ? "assets/images/darktheme.png"
+                          : "assets/images/lighttheme.png",
+                      imgBgColor: const Color(0xFFFDECEE),
+                      title: "Theme",
+                      trailingWidget: BlocBuilder<ThemeCubit, ThemeState>(
+                        builder: (context, state) {
+                          bool isDarkMode = state.themeMode == ThemeMode.dark;
+
+                          return Switch(
+                            value: isDarkMode,
+                            activeColor: isDark
+                                ? AppTheme.primaryLightBlue
+                                : AppTheme.primaryBlue,
+                            onChanged: (newValue) {
+                              context.read<ThemeCubit>().toggleTheme(newValue);
+                            },
+                          );
+                        },
+                      ),
                     ),
-                    NotificationItemWidget(
-                      img: "assets/images/rain.png",
-                      imgBgColor: const Color(0xFFE3F0FC),
-                      title: "Daily Forecast",
-                      switchValue: true,
-                    ),
-                    NotificationItemWidget(
-                      img: "assets/images/sun.png",
-                      imgBgColor: const Color(0xFFFFF9E6),
-                      title: "Morning Summary",
-                      switchValue: false,
+
+                    ProfileTileWidget(
+                      img: "assets/images/logout.png",
+                      imgBgColor: const Color(0xFFF1F4F9),
+                      title: "Log out",
+                      trailingWidget: BlocConsumer<AuthCubit, AuthState>(
+                        listener: (context, authState) {
+                          if (authState is AuthInitial) {
+                            final messenger = ScaffoldMessenger.of(context);
+                            final navigator = Navigator.of(context);
+
+                            messenger.clearSnackBars();
+
+                            navigator.pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (context) => SignIn()),
+                              (Route<dynamic> route) => false,
+                            );
+
+                            messenger.showSnackBar(
+                              const SnackBar(
+                                content: Text("signed out successfully!"),
+                              ),
+                            );
+                          } else if (authState is AuthError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(authState.errorMessage)),
+                            );
+                          }
+                        },
+
+                        builder: (context, authState) {
+                          return IconButton(
+                            icon: Icon(Icons.arrow_forward_ios_rounded),
+                            onPressed: () {
+                              if (authState is AuthLoading) {
+                                return;
+                              }
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  backgroundColor: isDark
+                                      ? AppTheme.primaryDarkBlue
+                                      : Colors.white,
+                                  title: Text(
+                                    "Logout?",
+
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      // color: AppTheme.primaryDarkBlue,
+                                    ),
+                                  ),
+                                  content: Text(
+                                    "Are you sure you want to logout?",
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        context.read<RecentsCubit>().clearAll();
+                                        context.read<AuthCubit>().logoutCubit();
+                                      },
+                                      child: authState is AuthLoading
+                                          ? CircularProgressIndicator()
+                                          : Text(
+                                              "Yes",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        "Cancel",
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ],
-                ),
-
-                SizedBox(height: 32.h),
-
-                BlocConsumer<AuthCubit, AuthState>(
-                  listener: (context, authState) {
-                    if (authState is AuthInitial) {
-                      final messenger = ScaffoldMessenger.of(context);
-                      final navigator = Navigator.of(context);
-
-                      messenger.clearSnackBars();
-
-                      navigator.pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => SignIn()),
-                        (Route<dynamic> route) => false,
-                      );
-
-                      messenger.showSnackBar(
-                        const SnackBar(
-                          content: Text("signed out successfully!"),
-                        ),
-                      );
-                    } else if (authState is AuthError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(authState.errorMessage)),
-                      );
-                    }
-                  },
-                  // listener: (context, authState) {
-                  //   if (authState is AuthInitial) {
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       const SnackBar(
-                  //         content: Text("signed out successfully!"),
-                  //       ),
-                  //     );
-                  //
-                  //     Navigator.pushAndRemoveUntil(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => SignIn()),
-                  //       (Route<dynamic> route) => false,
-                  //     );
-                  //   } else if (authState is AuthError) {
-                  //     ScaffoldMessenger.of(context).showSnackBar(
-                  //       SnackBar(content: Text(authState.errorMessage)),
-                  //     );
-                  //   }
-                  // },
-                  builder: (context, authState) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (authState is AuthLoading) {
-                          return;
-                        }
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            backgroundColor: isDark
-                                ? AppTheme.primaryDarkBlue
-                                : Colors.white,
-                            title: Text(
-                              "Logout?",
-
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                // color: AppTheme.primaryDarkBlue,
-                              ),
-                            ),
-                            content: Text("Are you sure you want to logout?"),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  context.read<RecentsCubit>().clearAll();
-                                  context.read<AuthCubit>().logoutCubit();
-                                },
-                                child: authState is AuthLoading
-                                    ? CircularProgressIndicator()
-                                    : Text(
-                                        "Yes",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.red,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 18.h),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFCECEE),
-                          borderRadius: BorderRadius.circular(24.r),
-                          border: Border.all(
-                            color: const Color(0xFFF5D6DA),
-                            width: 1.w,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Sign Out",
-                          style: TextStyle(
-                            color: const Color(0xFFE57373),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
                 ),
 
                 SizedBox(height: 80.h),

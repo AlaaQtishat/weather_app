@@ -17,7 +17,6 @@ class CurrentWeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final isSkeleton = Skeletonizer.of(context).enabled;
     final theme = Theme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(

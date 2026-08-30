@@ -15,8 +15,8 @@ class LetterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      width: isProfileScreen ? 120.r : 60.r,
-      height: isProfileScreen ? 120.r : 60.r,
+      width: isProfileScreen ? 170.r : 60.r,
+      height: isProfileScreen ? 170.r : 60.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: isDark
@@ -38,7 +38,7 @@ class LetterWidget extends StatelessWidget {
         letter.toUpperCase(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: isProfileScreen ? 55.sp : 24.sp,
+          fontSize: isProfileScreen ? 90.sp : 24.sp,
           color: Colors.white,
         ),
       ),

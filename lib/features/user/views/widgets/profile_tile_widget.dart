@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:weather_app/core/constants/app_theme.dart';
 
-class PreferenceItemWidget extends StatelessWidget {
+class ProfileTileWidget extends StatelessWidget {
   final String img;
   final Color imgBgColor;
   final String title;
-  final String trailingText;
+  final Widget trailingWidget;
+  final bool? isPreference;
 
-  const PreferenceItemWidget({
+  const ProfileTileWidget({
     super.key,
     required this.img,
     required this.imgBgColor,
     required this.title,
-    required this.trailingText,
+    required this.trailingWidget,
+    this.isPreference = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       child: Row(
@@ -27,7 +29,9 @@ class PreferenceItemWidget extends StatelessWidget {
             height: 36.r,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: imgBgColor,
+              color: isDark
+                  ? Colors.white.withOpacity(0.2)
+                  : Colors.black38.withOpacity(0.08),
               shape: BoxShape.circle,
             ),
             child: Image.asset(
@@ -43,20 +47,18 @@ class PreferenceItemWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.w500,
-              color: AppTheme.primaryDarkBlue,
+              // color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
             ),
           ),
           const Spacer(),
-          Text(
-            trailingText,
-            style: TextStyle(fontSize: 14.sp, color: const Color(0xFF7B8BA4)),
-          ),
+          trailingWidget,
           SizedBox(width: 8.w),
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 14.sp,
-            color: const Color(0xFF7B8BA4),
-          ),
+          if (isPreference == true) ...[
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.arrow_forward_ios_rounded),
+            ),
+          ],
         ],
       ),
     );

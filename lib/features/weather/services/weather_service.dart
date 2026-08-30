@@ -60,7 +60,8 @@ class WeatherService {
   static Future<WeatherResponse> getDailyWeather(double lat, double lon) async {
     try {
       String url =
-          "${ApiConstants.baseUrl}/timeline/1day?lat=$lat&lon=$lon&units=metric&appid=${ApiConstants.apiKey}";
+          "${ApiConstants.baseUrl}/timeline/1day?lat=$lat&lon=$lon&units="
+          "&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
       return WeatherResponse.fromJson(response.data);
     } catch (e) {

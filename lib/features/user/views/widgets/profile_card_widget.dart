@@ -8,6 +8,8 @@ class ProfileCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final theme = Theme.of(context);
     List<Widget> children = [];
     for (int i = 0; i < items.length; i++) {
       children.add(items[i]);
@@ -25,9 +27,18 @@ class ProfileCardWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: const Color(0xFFD4E3FB), width: 1.w),
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          isDark
+              ? BoxShadow(color: Colors.transparent)
+              : BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 5),
+                ),
+        ],
+        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
       ),
       child: Column(children: children),
     );

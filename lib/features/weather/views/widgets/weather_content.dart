@@ -16,7 +16,7 @@ class WeatherContent extends StatelessWidget {
   final WeatherData currentData;
   final WeatherData todayData;
   final List<WeatherData> hourlyData;
-  final Future<void> Function() onRefresh;
+  final Future<void> Function()? onRefresh;
   final bool isHomeScreen;
   final String? cityName;
   final String? country;
@@ -25,7 +25,7 @@ class WeatherContent extends StatelessWidget {
     required this.currentData,
     required this.todayData,
     required this.hourlyData,
-    required this.onRefresh,
+    this.onRefresh,
     this.isHomeScreen = false,
     this.cityName,
     this.country,
@@ -38,7 +38,7 @@ class WeatherContent extends StatelessWidget {
     final rainValue = currentData.rain?.h1 ?? 0.0;
     final bool showRainAlert = rainValue > 0;
     return RefreshIndicator(
-      onRefresh: onRefresh,
+      onRefresh: onRefresh ?? () async {},
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
