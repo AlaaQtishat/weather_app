@@ -48,4 +48,8 @@ class RecentsCubit extends Cubit<RecentsState> {
       emit(RecentsError(errorMessage: "Failed to clear recents"));
     }
   }
+
+  void clearStateOnLogout() {
+    emit(RecentsLoaded(recents: const []));
+  }
 }

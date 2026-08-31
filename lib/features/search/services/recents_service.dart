@@ -1,8 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class RecentsService {
-  static const String _recentsKey = 'recent_searches_key';
+  String get _recentsKey {
+    final userUid = FirebaseAuth.instance.currentUser?.uid;
+    return 'recent_searches_key_$userUid';
+  }
+
   static const int _maxRecents = 10;
 
   Future<void> saveRecentSearches(

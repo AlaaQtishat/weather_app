@@ -54,7 +54,7 @@ class LogoutTileWidget extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.pop(dialogContext);
-                      context.read<RecentsCubit>().clearAll();
+                      context.read<RecentsCubit>().clearStateOnLogout();
                       context.read<AuthCubit>().logoutCubit();
                     },
                     child: authState is AuthLoading
