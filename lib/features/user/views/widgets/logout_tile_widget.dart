@@ -5,6 +5,7 @@ import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/search/cubit/recents_cubit.dart';
+import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/user/views/widgets/profile_tile_widget.dart';
 
 class LogoutTileWidget extends StatelessWidget {
@@ -17,6 +18,8 @@ class LogoutTileWidget extends StatelessWidget {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, authState) {
         if (authState is AuthInitial) {
+          context.read<UserCubit>().clearUserData();
+          context.read<RecentsCubit>().clearStateOnLogout();
           ScaffoldMessenger.of(context).clearSnackBars();
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => SignIn()),
@@ -54,7 +57,6 @@ class LogoutTileWidget extends StatelessWidget {
                     ),
                     onPressed: () {
                       Navigator.pop(dialogContext);
-                      context.read<RecentsCubit>().clearStateOnLogout();
                       context.read<AuthCubit>().logoutCubit();
                     },
                     child: authState is AuthLoading
