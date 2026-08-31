@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:skeletonizer/skeletonizer.dart';
-import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/letter_widget.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/location/cubit/location_state.dart';
@@ -58,45 +56,29 @@ class _HeaderSectionState extends State<HeaderSection> {
               children: [
                 widget.isHome
                     ? const SizedBox()
-                    : Icon(
-                        Icons.pin_drop_outlined,
-                        // color: AppTheme.secondaryDarkBlue,
-                        size: 14.sp,
-                      ),
+                    : Icon(Icons.pin_drop_outlined, size: 14.sp),
                 widget.isHome ? const SizedBox() : SizedBox(width: 4.w),
                 Text(
                   widget.isHome ? formattedDate : displayCity,
-                  style: TextStyle(
-                    //  color: AppTheme.secondaryDarkBlue,
-                    fontSize: 14.sp,
-                  ),
+                  style: TextStyle(fontSize: 14.sp),
                 ),
               ],
             ),
             Row(
               children: [
                 widget.isHome
-                    ? Icon(
-                        Icons.my_location_outlined,
-                        size: 16.sp,
-                        //    color: Colors.grey,
-                      )
+                    ? Icon(Icons.my_location_outlined, size: 16.sp)
                     : const SizedBox(),
                 widget.isHome ? SizedBox(width: 4.w) : const SizedBox(),
 
                 if (widget.isHome)
                   if (locationState is LocationLoading ||
                       locationState is LocationInitial)
-                    Skeletonizer(
-                      containersColor: isDark
-                          ? Colors.white.withOpacity(0.06)
-                          : AppTheme.primaryDarkBlue.withOpacity(0.12),
-                      child: Text(
-                        "Loading City",
-                        style: TextStyle(
-                          fontSize: 28.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      "Loading City",
+                      style: TextStyle(
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                     )
                   else if (locationState is LocationLoaded)
@@ -110,7 +92,6 @@ class _HeaderSectionState extends State<HeaderSection> {
                             : locationState.cityName.length <= 21
                             ? 22.sp
                             : 12.sp,
-                        //  color: AppTheme.primaryDarkBlue,
                         fontWeight: FontWeight.bold,
                       ),
                     )
@@ -125,10 +106,9 @@ class _HeaderSectionState extends State<HeaderSection> {
                     )
                 else
                   Text(
-                    "7-Day Forecast",
+                    "10-Day Forecast",
                     style: TextStyle(
                       fontSize: 22.sp,
-                      //      color: AppTheme.primaryDarkBlue,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -138,7 +118,7 @@ class _HeaderSectionState extends State<HeaderSection> {
         ),
 
         if (userState is UserLoaded)
-          LetterWidget(letter: userState.user.fname[0].toUpperCase())
+          LetterWidget(letter: userState.user.fname[0])
         else if (userState is UserError)
           Container(
             width: 40.w,
@@ -156,11 +136,6 @@ class _HeaderSectionState extends State<HeaderSection> {
               ),
             ),
           ),
-        // else
-        //   Skeletonizer(
-        //
-        //     child: const LetterWidget(letter: "A"),
-        //   ),
       ],
     );
   }

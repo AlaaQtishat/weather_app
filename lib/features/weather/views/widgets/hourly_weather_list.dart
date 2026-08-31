@@ -41,7 +41,7 @@ class HourlyWeatherList extends StatelessWidget {
                 );
               },
               child: Text(
-                "7-day forecast",
+                "10-day forecast",
                 style: TextStyle(
                   decorationColor: isDark
                       ? AppTheme.primaryLightBlue

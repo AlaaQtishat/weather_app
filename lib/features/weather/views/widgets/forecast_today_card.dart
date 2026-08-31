@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/core/constants/app_theme.dart';
+import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
 
 class ForecastTodayCard extends StatelessWidget {
@@ -21,9 +22,14 @@ class ForecastTodayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String tempUnit = context.select(
+      (PreferencesCubit c) => c.state.tempUnit,
+    );
+    final bool isCelsius = tempUnit == "metric";
     String formattedDate = DateFormat('EEE d MMM').format(DateTime.now());
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
         color: theme.cardColor,
@@ -41,6 +47,7 @@ class ForecastTodayCard extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             WeatherAssets.getCustomIcon(iconCode),
@@ -53,13 +60,18 @@ class ForecastTodayCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  "$temp°",
-                  style: TextStyle(
-                    fontSize: 42.sp,
-                    fontWeight: FontWeight.w600,
-                    height: 1.0,
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    isCelsius ? "$temp°C" : "$temp°F",
+                    style: TextStyle(
+                      fontSize: 42.sp,
+                      fontWeight: FontWeight.w600,
+                      height: 1.0,
+                    ),
                   ),
                 ),
                 Text(
@@ -68,11 +80,10 @@ class ForecastTodayCard extends StatelessWidget {
                     color: isDark ? Colors.white70 : Colors.grey,
                     fontSize: 14.sp,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 6.h),
-                Row(
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Icon(
                       Icons.arrow_upward,
@@ -80,7 +91,7 @@ class ForecastTodayCard extends StatelessWidget {
                       color: isDark ? Colors.white70 : Colors.grey,
                     ),
                     Text(
-                      " $max°   ",
+                      isCelsius ? " $max°C   " : " $max°F   ",
                       style: TextStyle(
                         color: isDark ? Colors.white70 : Colors.grey,
                         fontSize: 12.sp,
@@ -92,7 +103,7 @@ class ForecastTodayCard extends StatelessWidget {
                       color: isDark ? Colors.white70 : Colors.grey,
                     ),
                     Text(
-                      " $min°",
+                      isCelsius ? " $min°C" : " $min°F",
                       style: TextStyle(
                         color: isDark ? Colors.white70 : Colors.grey,
                         fontSize: 12.sp,
@@ -103,8 +114,10 @@ class ForecastTodayCard extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(width: 8.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 "Today",
