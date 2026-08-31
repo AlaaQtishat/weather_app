@@ -15,12 +15,7 @@ class ProfileCardWidget extends StatelessWidget {
       children.add(items[i]);
       if (i < items.length - 1) {
         children.add(
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: const Color(0xFFE3ECFB),
-            indent: 64.w,
-          ),
+          Divider(height: 1, thickness: 0.5, color: const Color(0xFFE3ECFB)),
         );
       }
     }

@@ -22,15 +22,16 @@ class WeatherLoaded extends WeatherState {
   final WeatherResponse hourly;
 
   final WeatherResponse daily;
-
+  final String units;
   WeatherLoaded({
     required this.current,
     required this.hourly,
     required this.daily,
+    required this.units,
   });
 
   @override
-  List<Object?> get props => [current, hourly, daily];
+  List<Object?> get props => [current, hourly, daily, units];
 }
 
 class WeatherError extends WeatherState {

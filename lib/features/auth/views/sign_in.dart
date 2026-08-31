@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:weather_app/core/app%20preferences/app_preferences_service.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/app_validators.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
-import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
 import 'package:weather_app/features/auth/views/create_account.dart';
 import 'package:weather_app/features/auth/views/forget_password.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
@@ -24,7 +24,7 @@ class _SignInState extends State<SignIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  RememberMePrefs prefs = RememberMePrefs();
+  AppPreferences prefs = AppPreferences();
   bool isRememberMeChecked = false;
   @override
   void dispose() {
@@ -117,7 +117,9 @@ class _SignInState extends State<SignIn> {
 
                                 side: BorderSide(
                                   width: 2.w,
-                                  color: Colors.black45,
+                                  color: isDark
+                                      ? Colors.white70
+                                      : Colors.black45,
                                 ),
                                 onChanged: (val) {
                                   setState(() {

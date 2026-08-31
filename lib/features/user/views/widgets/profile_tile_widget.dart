@@ -3,18 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileTileWidget extends StatelessWidget {
   final String img;
-  final Color imgBgColor;
   final String title;
   final Widget trailingWidget;
-  final bool? isPreference;
 
   const ProfileTileWidget({
     super.key,
     required this.img,
-    required this.imgBgColor,
     required this.title,
     required this.trailingWidget,
-    this.isPreference = false,
   });
 
   @override
@@ -44,21 +40,10 @@ class ProfileTileWidget extends StatelessWidget {
           SizedBox(width: 16.w),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w500,
-              // color: isDark ? Colors.white70 : AppTheme.primaryDarkBlue,
-            ),
+            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
           ),
           const Spacer(),
           trailingWidget,
-          SizedBox(width: 8.w),
-          if (isPreference == true) ...[
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_forward_ios_rounded),
-            ),
-          ],
         ],
       ),
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'dart:math';
 import 'dart:async';
 
@@ -46,6 +48,9 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
+    final timeFormatPref = context.select(
+      (PreferencesCubit c) => c.state.timeFormat,
+    );
     if (widget.sunriseTimestamp == 0 || widget.sunsetTimestamp == 0) {
       return const SizedBox();
     }
@@ -57,8 +62,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
       widget.sunsetTimestamp * 1000,
     );
 
-    final timeFormat = DateFormat('HH:mm');
-
+    final timeFormat = DateFormat(timeFormatPref == '12h' ? 'h:mm a' : 'HH:mm');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

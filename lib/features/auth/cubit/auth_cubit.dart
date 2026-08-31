@@ -4,12 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
-import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
+import 'package:weather_app/core/app%20preferences/app_preferences_service.dart';
 import 'package:weather_app/features/user/models/user_model.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthService authService;
-  final RememberMePrefs prefs;
+  final AppPreferences prefs;
 
   AuthCubit(this.authService, this.prefs) : super(AuthInitial());
 

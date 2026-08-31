@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:weather_app/core/app%20preferences/app_preferences_service.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/core/widgets/custom_elevated_button.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
-import 'package:weather_app/features/onboarding/services/seen_prefs.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -46,8 +46,8 @@ class WelcomeScreen extends StatelessWidget {
               CustomElevatedButton(
                 content: Text("Get Started"),
                 onPressed: () async {
-                  SeenPrefs seen = SeenPrefs();
-                  await seen.saveIsSeen(true);
+                  AppPreferences prefs = AppPreferences();
+                  await prefs.saveIsSeen(true);
                   if (context.mounted) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => SignIn()),

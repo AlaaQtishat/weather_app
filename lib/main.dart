@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:weather_app/core/app%20preferences/app_preferences_service.dart';
+import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
+import 'package:weather_app/core/app%20preferences/cubit/preferences_state.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/network/dio_helper.dart';
-import 'package:weather_app/core/theme/cubit/theme_cubit.dart';
-import 'package:weather_app/core/theme/cubit/theme_state.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
-import 'package:weather_app/features/auth/services/remember_me_prefs.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
@@ -24,7 +24,7 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await GoogleSignIn.instance.initialize();
   final AuthService authService = AuthService();
-  final RememberMePrefs prefs = RememberMePrefs();
+  final AppPreferences prefs = AppPreferences();
   final UserService userService = UserService();
   DioHelper.init();
   runApp(
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   });
   final AuthService authService;
   final UserService userService;
-  final RememberMePrefs prefs;
+  final AppPreferences prefs;
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +57,20 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => WeatherCubit()),
             BlocProvider(create: (context) => SearchCubit()),
             BlocProvider(create: (context) => RecentsCubit()),
-            BlocProvider(create: (context) => ThemeCubit()),
+            BlocProvider(create: (context) => PreferencesCubit()),
           ],
 
-          child: BlocBuilder<ThemeCubit, ThemeState>(
-            builder: (context, themeState) {
+          child: BlocBuilder<PreferencesCubit, PreferencesState>(
+            builder: (context, prefState) {
               return MaterialApp(
                 home: SplashScreen(),
                 debugShowCheckedModeBanner: false,
 
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
-                themeMode: themeState.themeMode,
+                themeMode: prefState.isDarkMode
+                    ? ThemeMode.dark
+                    : ThemeMode.light,
               );
             },
           ),
