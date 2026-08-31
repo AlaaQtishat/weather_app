@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
@@ -14,6 +16,10 @@ class HourlyWeatherList extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final theme = Theme.of(context);
+    final String tempUnit = context.select(
+      (PreferencesCubit c) => c.state.tempUnit,
+    );
+    final bool isCelsius = tempUnit == "metric";
     return Column(
       children: [
         Row(
@@ -125,7 +131,9 @@ class HourlyWeatherList extends StatelessWidget {
                     ),
                     SizedBox(height: 6.h),
                     Text(
-                      "${item.temp.current.round()}°",
+                      isCelsius
+                          ? "${item.temp.current.round()}°C"
+                          : "${item.temp.current.round()}°F",
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,

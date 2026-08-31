@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
@@ -19,6 +21,10 @@ class CurrentWeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final String tempUnit = context.select(
+      (PreferencesCubit c) => c.state.tempUnit,
+    );
+    final bool isCelsius = tempUnit == "metric";
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
@@ -61,7 +67,9 @@ class CurrentWeatherCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "${currentData.temp.current.round()}°",
+                  isCelsius
+                      ? "${currentData.temp.current.round()}°C"
+                      : "${currentData.temp.current.round()}°F",
                   style: TextStyle(
                     fontSize: 48.sp,
                     fontWeight: FontWeight.bold,
@@ -86,9 +94,17 @@ class CurrentWeatherCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text("↑ ${todayData.temp.max?.round() ?? '--'}°"),
+                    Text(
+                      isCelsius
+                          ? "↑ ${todayData.temp.max?.round() ?? '--'}°C"
+                          : "↑ ${todayData.temp.max?.round() ?? '--'}°F",
+                    ),
                     SizedBox(width: 10.w),
-                    Text("↓ ${todayData.temp.min?.round() ?? '--'}°"),
+                    Text(
+                      isCelsius
+                          ? "↓ ${todayData.temp.min?.round() ?? '--'}°C"
+                          : "↓ ${todayData.temp.min?.round() ?? '--'}°F",
+                    ),
                   ],
                 ),
                 SizedBox(height: 12.h),
@@ -105,7 +121,9 @@ class CurrentWeatherCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Text(
-                    "Feels ${currentData.feelsLike.current.round()}°",
+                    isCelsius
+                        ? "Feels ${currentData.feelsLike.current.round()}°C"
+                        : "Feels ${currentData.feelsLike.current.round()}°F",
                     style: TextStyle(fontSize: 13.sp, color: Colors.white),
                   ),
                 ),
