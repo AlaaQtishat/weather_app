@@ -1,10 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/header_section.dart';
+import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/views/forecast_screen.dart';
 import 'package:weather_app/features/weather/views/widgets/current_weather_card.dart';
 import 'package:weather_app/features/weather/views/widgets/hourly_weather_list.dart';
 import 'package:weather_app/features/weather/views/widgets/precipitation_card.dart';
@@ -20,6 +23,7 @@ class WeatherContent extends StatelessWidget {
   final bool isHomeScreen;
   final String? cityName;
   final String? country;
+  final VoidCallback onForecastTap;
   WeatherContent({
     super.key,
     required this.currentData,
@@ -29,6 +33,7 @@ class WeatherContent extends StatelessWidget {
     this.isHomeScreen = false,
     this.cityName,
     this.country,
+    required this.onForecastTap,
   });
   final DateTime now = DateTime.now();
   @override
@@ -60,9 +65,7 @@ class WeatherContent extends StatelessWidget {
                           icon: Icon(
                             Icons.close,
                             size: 28.sp,
-                            color: isDark
-                                ? Colors.white70
-                                : AppTheme.primaryDarkBlue,
+                            color: Colors.grey,
                           ),
                         ),
 
@@ -148,7 +151,10 @@ class WeatherContent extends StatelessWidget {
 
               SizedBox(height: 24.h),
 
-              HourlyWeatherList(hourlyData: hourlyData),
+              HourlyWeatherList(
+                hourlyData: hourlyData,
+                onForecastTap: onForecastTap,
+              ),
 
               SizedBox(height: 24.h),
 

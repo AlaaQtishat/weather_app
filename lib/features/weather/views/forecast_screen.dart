@@ -12,7 +12,15 @@ import 'package:weather_app/features/weather/views/widgets/forecast_main_content
 import 'package:weather_app/core/widgets/header_section.dart';
 
 class ForecastScreen extends StatefulWidget {
-  const ForecastScreen({super.key});
+  final bool isSearchedCity;
+  final double? lonFromCity;
+  final double? latFromCity;
+  const ForecastScreen({
+    super.key,
+    this.isSearchedCity = false,
+    this.lonFromCity,
+    this.latFromCity,
+  });
 
   @override
   State<ForecastScreen> createState() => _ForecastScreenState();
@@ -23,12 +31,20 @@ class _ForecastScreenState extends State<ForecastScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final locationState = context.read<LocationCubit>().state;
-      if (locationState is LocationLoaded) {
+      if (widget.isSearchedCity) {
         context.read<WeatherCubit>().fetchWeatherData(
-          locationState.lat,
-          locationState.lon,
+          widget.latFromCity!,
+          widget.lonFromCity!,
         );
+      } else {
+        final locationState = context.read<LocationCubit>().state;
+
+        if (locationState is LocationLoaded) {
+          context.read<WeatherCubit>().fetchWeatherData(
+            locationState.lat,
+            locationState.lon,
+          );
+        }
       }
     });
   }
@@ -45,7 +61,10 @@ class _ForecastScreenState extends State<ForecastScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 16.h),
-                  HeaderSection(isHome: false),
+                  HeaderSection(
+                    isHome: false,
+                    showCloseButton: widget.isSearchedCity,
+                  ),
                   SizedBox(height: 24.h),
 
                   BlocConsumer<LocationCubit, LocationState>(

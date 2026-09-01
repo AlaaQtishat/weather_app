@@ -12,7 +12,12 @@ import 'package:weather_app/features/user/cubit/user_state.dart';
 
 class HeaderSection extends StatefulWidget {
   final bool isHome;
-  HeaderSection({super.key, required this.isHome});
+  final bool showCloseButton;
+  HeaderSection({
+    super.key,
+    required this.isHome,
+    this.showCloseButton = false,
+  });
 
   @override
   State<HeaderSection> createState() => _HeaderSectionState();
@@ -50,6 +55,15 @@ class _HeaderSectionState extends State<HeaderSection> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        if (widget.showCloseButton) ...[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(Icons.close, color: Colors.grey),
+          ),
+        ],
+
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

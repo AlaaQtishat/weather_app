@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/location/cubit/location_state.dart';
+import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
@@ -76,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (locState is LocationLoading || locState is LocationInitial) {
               return CustomSkeletonizer(
                 child: WeatherContent(
+                  onForecastTap: () {},
                   currentData: WeatherData.dummy,
                   todayData: WeatherData.dummy,
                   hourlyData: List.generate(5, (index) => WeatherData.dummy),
@@ -109,6 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   weatherState is WeatherInitial) {
                 return CustomSkeletonizer(
                   child: WeatherContent(
+                    onForecastTap: () {},
                     currentData: WeatherData.dummy,
                     todayData: WeatherData.dummy,
                     hourlyData: List.generate(5, (index) => WeatherData.dummy),
@@ -119,6 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               if (weatherState is WeatherLoaded) {
                 return WeatherContent(
+                  onForecastTap: () {
+                    context.read<NavigationCubit>().changeIndex(2);
+                  },
                   onRefresh: () async {
                     final currentLocState = context.read<LocationCubit>().state;
 

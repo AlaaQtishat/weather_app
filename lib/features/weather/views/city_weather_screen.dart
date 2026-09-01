@@ -4,6 +4,7 @@ import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
+import 'package:weather_app/features/weather/views/forecast_screen.dart';
 import 'package:weather_app/features/weather/views/widgets/custom_error_widget.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
 
@@ -61,6 +62,17 @@ class CityWeatherScreen extends StatelessWidget {
 
     if (weatherState is WeatherLoaded) {
       return WeatherContent(
+        onForecastTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ForecastScreen(
+                latFromCity: lat,
+                lonFromCity: lon,
+                isSearchedCity: true,
+              ),
+            ),
+          );
+        },
         onRefresh: () async {
           await context.read<WeatherCubit>().fetchWeatherData(lat, lon);
         },

@@ -11,7 +11,12 @@ import 'package:weather_app/features/weather/views/forecast_screen.dart';
 
 class HourlyWeatherList extends StatelessWidget {
   final List<WeatherData> hourlyData;
-  const HourlyWeatherList({super.key, required this.hourlyData});
+  final VoidCallback onForecastTap;
+  const HourlyWeatherList({
+    super.key,
+    required this.hourlyData,
+    required this.onForecastTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +41,7 @@ class HourlyWeatherList extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                context.read<NavigationCubit>().changeIndex(2);
-              },
+              onTap: onForecastTap,
               child: Text(
                 "10-day forecast",
                 style: TextStyle(
