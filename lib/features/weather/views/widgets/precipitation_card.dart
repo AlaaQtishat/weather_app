@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_data_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 
 class PrecipitationCard extends StatelessWidget {
-  final List<WeatherData> hourlyData;
+  final List<WeatherDataModel> hourlyData;
   const PrecipitationCard({super.key, required this.hourlyData});
   @override
   Widget build(BuildContext context) {

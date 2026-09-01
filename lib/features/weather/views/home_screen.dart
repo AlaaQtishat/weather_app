@@ -6,7 +6,8 @@ import 'package:weather_app/features/location/cubit/location_state.dart';
 import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_data_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/features/weather/views/widgets/custom_error_widget.dart';
 import 'package:weather_app/features/weather/views/widgets/custom_skeletonizer.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
@@ -78,9 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
               return CustomSkeletonizer(
                 child: WeatherContent(
                   onForecastTap: () {},
-                  currentData: WeatherData.dummy,
-                  todayData: WeatherData.dummy,
-                  hourlyData: List.generate(5, (index) => WeatherData.dummy),
+                  currentData: WeatherDataModel.dummy,
+                  todayData: WeatherDataModel.dummy,
+                  hourlyData: List.generate(
+                    5,
+                    (index) => WeatherDataModel.dummy,
+                  ),
                   isHomeScreen: true,
                 ),
               );
@@ -112,9 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 return CustomSkeletonizer(
                   child: WeatherContent(
                     onForecastTap: () {},
-                    currentData: WeatherData.dummy,
-                    todayData: WeatherData.dummy,
-                    hourlyData: List.generate(5, (index) => WeatherData.dummy),
+                    currentData: WeatherDataModel.dummy,
+                    todayData: WeatherDataModel.dummy,
+                    hourlyData: List.generate(
+                      5,
+                      (index) => WeatherDataModel.dummy,
+                    ),
                     isHomeScreen: true,
                   ),
                 );

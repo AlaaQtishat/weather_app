@@ -6,11 +6,12 @@ import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart'
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
 import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_data_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/features/weather/views/forecast_screen.dart';
 
 class HourlyWeatherList extends StatelessWidget {
-  final List<WeatherData> hourlyData;
+  final List<WeatherDataModel> hourlyData;
   final VoidCallback onForecastTap;
   const HourlyWeatherList({
     super.key,

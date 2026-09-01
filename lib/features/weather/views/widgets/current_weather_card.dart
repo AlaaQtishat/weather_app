@@ -4,12 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_data_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
 
 class CurrentWeatherCard extends StatelessWidget {
-  final WeatherData currentData;
-  final WeatherData todayData;
+  final WeatherDataModel currentData;
+  final WeatherDataModel todayData;
 
   const CurrentWeatherCard({
     super.key,

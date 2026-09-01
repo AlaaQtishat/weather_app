@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 
 class WeatherState extends Equatable {
   @override
@@ -17,11 +17,11 @@ class WeatherLoading extends WeatherState {
 }
 
 class WeatherLoaded extends WeatherState {
-  final WeatherResponse current;
+  final WeatherResponseModel current;
 
-  final WeatherResponse hourly;
+  final WeatherResponseModel hourly;
 
-  final WeatherResponse daily;
+  final WeatherResponseModel daily;
   final String units;
   WeatherLoaded({
     required this.current,

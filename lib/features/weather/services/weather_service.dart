@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:weather_app/core/constants/api_constants.dart';
 import 'package:weather_app/core/network/dio_helper.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 
 class WeatherService {
   static Exception _handleDioError(dynamic e) {
@@ -29,7 +29,7 @@ class WeatherService {
     return Exception('Unexpected error occurred. Please try again.');
   }
 
-  static Future<WeatherResponse> getCurrentWeatherApi(
+  static Future<WeatherResponseModel> getCurrentWeatherApi(
     double lat,
     double lon,
     String units,
@@ -38,13 +38,13 @@ class WeatherService {
       String url =
           "${ApiConstants.baseUrl}/current?lat=$lat&lon=$lon&units=$units&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
-      return WeatherResponse.fromJson(response.data);
+      return WeatherResponseModel.fromJson(response.data);
     } catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  static Future<WeatherResponse> getHourlyWeatherApi(
+  static Future<WeatherResponseModel> getHourlyWeatherApi(
     double lat,
     double lon,
     String units,
@@ -53,13 +53,13 @@ class WeatherService {
       String url =
           "${ApiConstants.baseUrl}/timeline/1h?lat=$lat&lon=$lon&units=$units&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
-      return WeatherResponse.fromJson(response.data);
+      return WeatherResponseModel.fromJson(response.data);
     } catch (e) {
       throw _handleDioError(e);
     }
   }
 
-  static Future<WeatherResponse> getDailyWeatherApi(
+  static Future<WeatherResponseModel> getDailyWeatherApi(
     double lat,
     double lon,
     String units,
@@ -68,7 +68,7 @@ class WeatherService {
       String url =
           "${ApiConstants.baseUrl}/timeline/1day?lat=$lat&lon=$lon&units=$units&appid=${ApiConstants.apiKey}";
       Response response = await DioHelper.getData(url: url);
-      return WeatherResponse.fromJson(response.data);
+      return WeatherResponseModel.fromJson(response.data);
     } catch (e) {
       throw _handleDioError(e);
     }

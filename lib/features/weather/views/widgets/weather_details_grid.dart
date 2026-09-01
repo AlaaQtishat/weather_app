@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_data_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/features/weather/views/widgets/details_card.dart';
 
 class WeatherDetailsGrid extends StatelessWidget {
-  final WeatherData currentData;
+  final WeatherDataModel currentData;
   const WeatherDetailsGrid({super.key, required this.currentData});
 
   @override

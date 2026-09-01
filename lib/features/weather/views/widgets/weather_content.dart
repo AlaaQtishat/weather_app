@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/header_section.dart';
 import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
-import 'package:weather_app/features/weather/models/weather_model.dart';
+import 'package:weather_app/features/weather/models/weather_data_model.dart';
+import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/features/weather/views/forecast_screen.dart';
 import 'package:weather_app/features/weather/views/widgets/current_weather_card.dart';
 import 'package:weather_app/features/weather/views/widgets/hourly_weather_list.dart';
@@ -16,9 +17,9 @@ import 'package:weather_app/features/weather/views/widgets/sunrise_sunset_card.d
 import 'package:weather_app/features/weather/views/widgets/weather_details_grid.dart';
 
 class WeatherContent extends StatelessWidget {
-  final WeatherData currentData;
-  final WeatherData todayData;
-  final List<WeatherData> hourlyData;
+  final WeatherDataModel currentData;
+  final WeatherDataModel todayData;
+  final List<WeatherDataModel> hourlyData;
   final Future<void> Function()? onRefresh;
   final bool isHomeScreen;
   final String? cityName;
