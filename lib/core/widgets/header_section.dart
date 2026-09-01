@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/core/widgets/letter_widget.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
 import 'package:weather_app/features/location/cubit/location_state.dart';
+import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_state.dart';
 
@@ -118,7 +119,12 @@ class _HeaderSectionState extends State<HeaderSection> {
         ),
 
         if (userState is UserLoaded)
-          LetterWidget(letter: userState.user.fname[0])
+          GestureDetector(
+            child: LetterWidget(letter: userState.user.fname[0]),
+            onTap: () {
+              context.read<NavigationCubit>().changeIndex(3);
+            },
+          )
         else if (userState is UserError)
           Container(
             width: 40.w,

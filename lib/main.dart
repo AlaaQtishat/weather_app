@@ -11,6 +11,7 @@ import 'package:weather_app/core/network/dio_helper.dart';
 import 'package:weather_app/features/auth/cubit/auth_cubit.dart';
 import 'package:weather_app/features/auth/services/auth_service.dart';
 import 'package:weather_app/features/location/cubit/location_cubit.dart';
+import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/search/cubit/recents_cubit.dart';
 import 'package:weather_app/features/search/cubit/search_cubit.dart';
 import 'package:weather_app/features/user/cubit/user_cubit.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
             BlocProvider(create: (context) => SearchCubit()),
             BlocProvider(create: (context) => RecentsCubit()),
             BlocProvider(create: (context) => PreferencesCubit()),
+            BlocProvider(create: (context) => NavigationCubit()),
           ],
 
           child: BlocBuilder<PreferencesCubit, PreferencesState>(

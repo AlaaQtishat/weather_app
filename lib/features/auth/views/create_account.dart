@@ -11,7 +11,7 @@ import 'package:weather_app/features/auth/cubit/auth_state.dart';
 import 'package:weather_app/features/auth/views/sign_in.dart';
 import 'package:weather_app/features/auth/views/widgets/custom_text_field.dart';
 import 'package:weather_app/features/user/models/user_model.dart';
-import 'package:weather_app/features/weather/views/main_layout_screen.dart';
+import 'package:weather_app/features/main_layout/views/main_layout_screen.dart';
 import 'package:intl/intl.dart';
 
 class CreateAccount extends StatefulWidget {

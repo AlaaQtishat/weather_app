@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
+import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/weather/models/weather_model.dart';
 import 'package:weather_app/features/weather/views/forecast_screen.dart';
 
@@ -36,9 +37,7 @@ class HourlyWeatherList extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ForecastScreen()),
-                );
+                context.read<NavigationCubit>().changeIndex(2);
               },
               child: Text(
                 "10-day forecast",
