@@ -38,15 +38,6 @@ class _ForecastScreenState extends State<ForecastScreen> {
           widget.latFromCity!,
           widget.lonFromCity!,
         );
-      } else {
-        final locationState = context.read<LocationCubit>().state;
-
-        if (locationState is LocationLoaded) {
-          context.read<WeatherCubit>().fetchWeatherData(
-            locationState.lat,
-            locationState.lon,
-          );
-        }
       }
     });
   }
