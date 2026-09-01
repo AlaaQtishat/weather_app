@@ -53,103 +53,121 @@ class _ForecastScreenState extends State<ForecastScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ContainerBackground(
-        content: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 16.h),
-                  HeaderSection(
-                    isHome: false,
-                    showCloseButton: widget.isSearchedCity,
-                    cityName: widget.cityName,
-                  ),
-                  SizedBox(height: 24.h),
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (bool didPop) {
+        if (widget.isSearchedCity == true) {
+          final locationState = context.read<LocationCubit>().state;
 
-                  BlocConsumer<LocationCubit, LocationState>(
-                    listener: (context, locState) {
-                      if (locState is LocationLoaded) {
-                        context.read<WeatherCubit>().fetchWeatherData(
-                          locState.lat,
-                          locState.lon,
-                        );
-                      }
-                    },
-                    builder: (context, locState) {
-                      if (locState is LocationError) {
-                        final errorMsg = locState.errorMessage.toLowerCase();
-                        final isGpsOff = errorMsg.contains('disabled');
-                        final isDeniedForever = errorMsg.contains(
-                          'permanently',
-                        );
+          if (locationState is LocationLoaded) {
+            context.read<WeatherCubit>().fetchWeatherData(
+              locationState.lat,
+              locationState.lon,
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        body: ContainerBackground(
+          content: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 16.h),
+                    HeaderSection(
+                      isHome: false,
+                      showCloseButton: widget.isSearchedCity,
+                      cityName: widget.cityName,
+                    ),
+                    SizedBox(height: 24.h),
 
-                        return CustomErrorWidget(
-                          icon: isGpsOff
-                              ? Icons.gps_off_rounded
-                              : (isDeniedForever
-                                    ? Icons.block_flipped
-                                    : Icons.location_off_rounded),
-                          title: isGpsOff
-                              ? "GPS is Disabled"
-                              : (isDeniedForever
-                                    ? "Permission Blocked"
-                                    : "Location Access Denied"),
-                          message: isGpsOff
-                              ? "Please turn on your GPS from the quick settings and try again."
-                              : (isDeniedForever
-                                    ? "Location is permanently denied.\nPlease go to your device Settings to allow access."
-                                    : "Please allow location permissions to get your local weather."),
-                          buttonText: "Try Again",
-                          onPressed: () =>
-                              context.read<LocationCubit>().fetchUserLocation(),
-                        );
-                      }
+                    BlocConsumer<LocationCubit, LocationState>(
+                      listener: (context, locState) {
+                        if (locState is LocationLoaded) {
+                          context.read<WeatherCubit>().fetchWeatherData(
+                            locState.lat,
+                            locState.lon,
+                          );
+                        }
+                      },
+                      builder: (context, locState) {
+                        if (locState is LocationError) {
+                          final errorMsg = locState.errorMessage.toLowerCase();
+                          final isGpsOff = errorMsg.contains('disabled');
+                          final isDeniedForever = errorMsg.contains(
+                            'permanently',
+                          );
 
-                      if (locState is LocationLoading ||
-                          locState is LocationInitial) {
-                        return const CustomSkeletonizer(
-                          child: DummyForecastContent(),
-                        );
-                      }
+                          return CustomErrorWidget(
+                            icon: isGpsOff
+                                ? Icons.gps_off_rounded
+                                : (isDeniedForever
+                                      ? Icons.block_flipped
+                                      : Icons.location_off_rounded),
+                            title: isGpsOff
+                                ? "GPS is Disabled"
+                                : (isDeniedForever
+                                      ? "Permission Blocked"
+                                      : "Location Access Denied"),
+                            message: isGpsOff
+                                ? "Please turn on your GPS from the quick settings and try again."
+                                : (isDeniedForever
+                                      ? "Location is permanently denied.\nPlease go to your device Settings to allow access."
+                                      : "Please allow location permissions to get your local weather."),
+                            buttonText: "Try Again",
+                            onPressed: () => context
+                                .read<LocationCubit>()
+                                .fetchUserLocation(),
+                          );
+                        }
 
-                      if (locState is LocationLoaded) {
-                        return BlocBuilder<WeatherCubit, WeatherState>(
-                          builder: (context, weatherState) {
-                            if (weatherState is WeatherError) {
-                              final cleanMessage = weatherState.errorMessage
-                                  .replaceAll('Exception: ', '');
-                              return CustomErrorWidget(
-                                icon: Icons.cloud_off_rounded,
-                                title: "Oops! We couldn't fetch the weather.",
-                                message: cleanMessage,
-                                buttonText: "Try Again",
-                                onPressed: () {
-                                  context.read<WeatherCubit>().fetchWeatherData(
-                                    locState.lat,
-                                    locState.lon,
-                                  );
-                                },
+                        if (locState is LocationLoading ||
+                            locState is LocationInitial) {
+                          return const CustomSkeletonizer(
+                            child: DummyForecastContent(),
+                          );
+                        }
+
+                        if (locState is LocationLoaded) {
+                          return BlocBuilder<WeatherCubit, WeatherState>(
+                            builder: (context, weatherState) {
+                              if (weatherState is WeatherError) {
+                                final cleanMessage = weatherState.errorMessage
+                                    .replaceAll('Exception: ', '');
+                                return CustomErrorWidget(
+                                  icon: Icons.cloud_off_rounded,
+                                  title: "Oops! We couldn't fetch the weather.",
+                                  message: cleanMessage,
+                                  buttonText: "Try Again",
+                                  onPressed: () {
+                                    context
+                                        .read<WeatherCubit>()
+                                        .fetchWeatherData(
+                                          locState.lat,
+                                          locState.lon,
+                                        );
+                                  },
+                                );
+                              }
+                              if (weatherState is WeatherLoaded) {
+                                return ForecastMainContent(state: weatherState);
+                              }
+                              return const CustomSkeletonizer(
+                                child: DummyForecastContent(),
                               );
-                            }
-                            if (weatherState is WeatherLoaded) {
-                              return ForecastMainContent(state: weatherState);
-                            }
-                            return const CustomSkeletonizer(
-                              child: DummyForecastContent(),
-                            );
-                          },
-                        );
-                      }
+                            },
+                          );
+                        }
 
-                      return const SizedBox();
-                    },
-                  ),
-                  SizedBox(height: 24.h),
-                ],
+                        return const SizedBox();
+                      },
+                    ),
+                    SizedBox(height: 24.h),
+                  ],
+                ),
               ),
             ),
           ),
