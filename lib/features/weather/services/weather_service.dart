@@ -29,7 +29,7 @@ class WeatherService {
     return Exception('Unexpected error occurred. Please try again.');
   }
 
-  static Future<WeatherResponse> getCurrentWeather(
+  static Future<WeatherResponse> getCurrentWeatherApi(
     double lat,
     double lon,
     String units,
@@ -44,7 +44,7 @@ class WeatherService {
     }
   }
 
-  static Future<WeatherResponse> getHourlyWeather(
+  static Future<WeatherResponse> getHourlyWeatherApi(
     double lat,
     double lon,
     String units,
@@ -59,7 +59,7 @@ class WeatherService {
     }
   }
 
-  static Future<WeatherResponse> getDailyWeather(
+  static Future<WeatherResponse> getDailyWeatherApi(
     double lat,
     double lon,
     String units,

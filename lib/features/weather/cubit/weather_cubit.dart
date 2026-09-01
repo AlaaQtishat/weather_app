@@ -11,13 +11,21 @@ class WeatherCubit extends Cubit<WeatherState> {
     emit(WeatherLoading());
     try {
       final String units = await prefs.getTempUnit();
-      final currentData = await WeatherService.getCurrentWeather(
+      final currentData = await WeatherService.getCurrentWeatherApi(
         lat,
         lon,
         units,
       );
-      final hourlyData = await WeatherService.getHourlyWeather(lat, lon, units);
-      final dailyData = await WeatherService.getDailyWeather(lat, lon, units);
+      final hourlyData = await WeatherService.getHourlyWeatherApi(
+        lat,
+        lon,
+        units,
+      );
+      final dailyData = await WeatherService.getDailyWeatherApi(
+        lat,
+        lon,
+        units,
+      );
 
       emit(
         WeatherLoaded(
