@@ -13,10 +13,12 @@ import 'package:weather_app/features/user/cubit/user_state.dart';
 class HeaderSection extends StatefulWidget {
   final bool isHome;
   final bool showCloseButton;
+  final String? cityName;
   HeaderSection({
     super.key,
     required this.isHome,
     this.showCloseButton = false,
+    this.cityName,
   });
 
   @override
@@ -43,94 +45,106 @@ class _HeaderSectionState extends State<HeaderSection> {
     final locationState = context.watch<LocationCubit>().state;
     final userState = context.watch<UserCubit>().state;
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
     String displayCity = "Unknown Location";
-    if (locationState is LocationLoaded) {
-      displayCity = locationState.cityName;
-    } else if (locationState is LocationLoading ||
-        locationState is LocationInitial) {
-      displayCity = "Loading...";
+    if (widget.cityName != null) {
+      displayCity = widget.cityName!;
+    } else {
+      if (locationState is LocationLoaded) {
+        displayCity = locationState.cityName;
+      } else if (locationState is LocationLoading ||
+          locationState is LocationInitial) {
+        displayCity = "Loading...";
+      }
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (widget.showCloseButton) ...[
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: Icon(Icons.close, color: Colors.grey),
-          ),
-        ],
-
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                widget.isHome
-                    ? const SizedBox()
-                    : Icon(Icons.pin_drop_outlined, size: 14.sp),
-                widget.isHome ? const SizedBox() : SizedBox(width: 4.w),
-                Text(
-                  widget.isHome ? formattedDate : displayCity,
-                  style: TextStyle(fontSize: 14.sp),
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.showCloseButton) ...[
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  alignment: Alignment.centerLeft,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.close, color: Colors.grey, size: 28.sp),
                 ),
+                SizedBox(width: 8.w),
               ],
-            ),
-            Row(
-              children: [
-                widget.isHome
-                    ? Icon(Icons.my_location_outlined, size: 16.sp)
-                    : const SizedBox(),
-                widget.isHome ? SizedBox(width: 4.w) : const SizedBox(),
 
-                if (widget.isHome)
-                  if (locationState is LocationLoading ||
-                      locationState is LocationInitial)
-                    Text(
-                      "Loading City",
-                      style: TextStyle(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  else if (locationState is LocationLoaded)
-                    Text(
-                      locationState.cityName,
-                      style: TextStyle(
-                        fontSize: locationState.cityName.length <= 10
-                            ? 28.sp
-                            : locationState.cityName.length <= 15
-                            ? 24.sp
-                            : locationState.cityName.length <= 21
-                            ? 22.sp
-                            : 12.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  else
-                    Text(
-                      "Location Unknown",
-                      style: TextStyle(
-                        fontSize: 20.sp,
-                        color: Colors.redAccent,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                else
-                  Text(
-                    "10-Day Forecast",
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        if (!widget.isHome) ...[
+                          Icon(Icons.pin_drop_outlined, size: 14.sp),
+                          SizedBox(width: 4.w),
+                        ],
+                        Flexible(
+                          child: Text(
+                            widget.isHome ? formattedDate : displayCity,
+                            style: TextStyle(fontSize: 14.sp),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-              ],
-            ),
-          ],
+                    SizedBox(height: 2.h),
+                    Row(
+                      children: [
+                        if (widget.isHome) ...[
+                          Icon(Icons.my_location_outlined, size: 16.sp),
+                          SizedBox(width: 4.w),
+                          Flexible(
+                            child: Text(
+                              displayCity,
+                              style: TextStyle(
+                                fontSize: displayCity.length <= 10
+                                    ? 28.sp
+                                    : displayCity.length <= 15
+                                    ? 24.sp
+                                    : displayCity.length <= 21
+                                    ? 22.sp
+                                    : 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: (displayCity == "Unknown Location")
+                                    ? Colors.redAccent
+                                    : null,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ] else ...[
+                          Flexible(
+                            child: Text(
+                              "10-Day Forecast",
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
+
+        SizedBox(width: 12.w),
 
         if (userState is UserLoaded)
           GestureDetector(

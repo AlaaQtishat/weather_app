@@ -51,92 +51,14 @@ class WeatherContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 60.h),
-              isHomeScreen
-                  ? HeaderSection(isHome: true)
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          alignment: Alignment.centerLeft,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            size: 28.sp,
-                            color: Colors.grey,
-                          ),
-                        ),
 
-                        SizedBox(width: 8.w),
+              HeaderSection(
+                isHome: true,
+                cityName: cityName,
+                showCloseButton: !isHomeScreen,
+              ),
 
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                formattedDate,
-                                style: TextStyle(
-                                  color: isDark
-                                      ? Colors.white70
-                                      : AppTheme.secondaryDarkBlue,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-
-                              SizedBox(height: 6.h),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 4.h),
-                                    child: Icon(
-                                      Icons.my_location_outlined,
-                                      size: 18.sp,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4.w),
-
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        AutoSizeText(
-                                          cityName!,
-                                          style: TextStyle(
-                                            fontSize: 24.sp,
-                                            fontWeight: FontWeight.bold,
-                                            height: 1.2,
-                                          ),
-                                          maxLines: 1,
-                                          minFontSize: 18,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        Text(
-                                          country!,
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
-                                            color: isDark
-                                                ? Colors.white70
-                                                : AppTheme.secondaryDarkBlue,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+              SizedBox(height: 30.h),
               SizedBox(height: 30.h),
 
               CurrentWeatherCard(

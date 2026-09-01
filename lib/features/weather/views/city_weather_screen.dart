@@ -69,6 +69,7 @@ class CityWeatherScreen extends StatelessWidget {
                 latFromCity: lat,
                 lonFromCity: lon,
                 isSearchedCity: true,
+                cityName: cityName,
               ),
             ),
           );

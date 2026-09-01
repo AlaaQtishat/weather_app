@@ -15,11 +15,13 @@ class ForecastScreen extends StatefulWidget {
   final bool isSearchedCity;
   final double? lonFromCity;
   final double? latFromCity;
+  final String? cityName;
   const ForecastScreen({
     super.key,
     this.isSearchedCity = false,
     this.lonFromCity,
     this.latFromCity,
+    this.cityName,
   });
 
   @override
@@ -64,6 +66,7 @@ class _ForecastScreenState extends State<ForecastScreen> {
                   HeaderSection(
                     isHome: false,
                     showCloseButton: widget.isSearchedCity,
+                    cityName: widget.cityName,
                   ),
                   SizedBox(height: 24.h),
 
