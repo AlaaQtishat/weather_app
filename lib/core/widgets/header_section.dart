@@ -65,6 +65,7 @@ class _HeaderSectionState extends State<HeaderSection> {
         Expanded(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               if (widget.showCloseButton) ...[
                 IconButton(
@@ -76,7 +77,7 @@ class _HeaderSectionState extends State<HeaderSection> {
                   },
                   icon: Icon(Icons.close, color: Colors.grey, size: 28.sp),
                 ),
-                SizedBox(width: 8.w),
+                //  SizedBox(width: 8.w),
               ],
 
               Expanded(
@@ -147,29 +148,30 @@ class _HeaderSectionState extends State<HeaderSection> {
         SizedBox(width: 12.w),
 
         if (userState is UserLoaded)
-          GestureDetector(
-            child: LetterWidget(letter: userState.user.fname[0]),
-            onTap: () {
-              context.read<NavigationCubit>().changeIndex(3);
-            },
-          )
-        else if (userState is UserError)
-          Container(
-            width: 40.w,
-            height: 40.w,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.red.shade50,
-              border: Border.all(color: Colors.red.shade200),
-            ),
-            child: Center(
-              child: Icon(
-                Icons.person_off_outlined,
-                color: Colors.redAccent,
-                size: 20.sp,
+          if (!widget.showCloseButton)
+            GestureDetector(
+              child: LetterWidget(letter: userState.user.fname[0]),
+              onTap: () {
+                context.read<NavigationCubit>().changeIndex(3);
+              },
+            )
+          else if (userState is UserError)
+            Container(
+              width: 40.w,
+              height: 40.w,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.red.shade50,
+                border: Border.all(color: Colors.red.shade200),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.person_off_outlined,
+                  color: Colors.redAccent,
+                  size: 20.sp,
+                ),
               ),
             ),
-          ),
       ],
     );
   }

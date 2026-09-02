@@ -4,7 +4,7 @@ import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/widgets/container_background.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
-import 'package:weather_app/features/weather/views/forecast_screen.dart';
+import 'package:weather_app/features/weather/views/city_forecast_Screen.dart';
 import 'package:weather_app/features/weather/views/widgets/custom_error_widget.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
 
@@ -29,7 +29,7 @@ class CityWeatherScreen extends StatelessWidget {
         body: ContainerBackground(
           content: BlocBuilder<WeatherCubit, WeatherState>(
             builder: (context, weatherState) {
-              return _buildMainContent(context, weatherState);
+              return buildMainContent(context, weatherState);
             },
           ),
         ),
@@ -37,7 +37,7 @@ class CityWeatherScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMainContent(BuildContext context, WeatherState weatherState) {
+  Widget buildMainContent(BuildContext context, WeatherState weatherState) {
     if (weatherState is WeatherLoading || weatherState is WeatherInitial) {
       return Center(
         child: CircularProgressIndicator(color: AppTheme.primaryBlue),
@@ -65,12 +65,8 @@ class CityWeatherScreen extends StatelessWidget {
         onForecastTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => ForecastScreen(
-                latFromCity: lat,
-                lonFromCity: lon,
-                isSearchedCity: true,
-                cityName: cityName,
-              ),
+              builder: (context) =>
+                  CityForecastScreen(lat: lat, lon: lon, cityName: cityName),
             ),
           );
         },

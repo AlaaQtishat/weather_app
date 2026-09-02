@@ -51,7 +51,7 @@ class WeatherContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 60.h),
+              SizedBox(height: 52.h),
 
               HeaderSection(
                 isHome: true,
