@@ -1,8 +1,8 @@
 # 🌤️ Weather App 
 
-A beautifully designed, responsive Weather application built with Flutter. This project focuses on delivering a seamless UI/UX experience, featuring custom gradient styling, an intuitive layout, and full dynamic theming (Light & Dark mode) to adapt to user preferences. 
+A feature-rich, high-performance Weather application built with Flutter, combining a pixel-perfect UI with a highly scalable architectural foundation. 
 
-Real-time weather conditions are fetched seamlessly using the OpenWeatherMap API, with state management efficiently handled via Cubit.
+Under the hood, the project is structured around **Clean Architecture**, leveraging **Cubit (`flutter_bloc`)** for efficient, optimized state management. It handles complex data flows—such as switching between live GPS location weather and searched city forecasts—without unnecessary network overhead. Real-time data is fetched via the **OpenWeatherMap API** using robust HTTP client requests, demonstrating a strong separation of concerns across models, services, and presentation layers.
 
 ## 📸 Screenshots & UI Design
  
@@ -65,3 +65,26 @@ Real-time weather conditions are fetched seamlessly using the OpenWeatherMap API
   <img src="https://github.com/user-attachments/assets/d7360b53-d8e4-4f09-8d41-29545ffa2441" width="45%" title="Profile Light" />
   <img src="https://github.com/user-attachments/assets/1c4c6fe3-7790-4406-b6ed-4d4639ee2502" width="45%" title="Profile Dark" />
 </p>
+
+
+## ✨ Key Features
+
+* **Advanced State Management (`flutter_bloc`):** Utilizes Cubit to efficiently manage global and local states, ensuring minimal widget rebuilds and a strict separation of business logic from the UI.
+* **Robust REST API Integration:** Seamlessly fetches real-time weather data and forecasts from OpenWeatherMap using `dio`, coupled with `pretty_dio_logger` for clean and readable network debugging.
+* **Secure Authentication & Database:** Features a comprehensive authentication flow powered by `firebase_auth`, supporting standard Email/Password login alongside social integrations (`google_sign_in` & `flutter_facebook_auth`). User data is securely managed via `cloud_firestore`.
+* **Smart Location Services:** Uses `geolocator` to fetch precise user coordinates for local weather, and `geocoding` to translate coordinates into readable city and country names.
+* **Pixel-Perfect Responsive UI:** Built utilizing `flutter_screenutil` to guarantee adaptive layouts, consistent padding, and adaptable font sizes across all screen dimensions. `auto_size_text` is used to gracefully handle dynamic text lengths without overflow errors.
+* **Elegant Loading States:** Enhances perceived performance and UX by replacing traditional loading spinners with beautiful, modern shimmer effects using `skeletonizer`.
+* **Dynamic Theming & Preferences:** Fully supports instant switching between Light and Dark modes. User preferences (Theme, Temperature Units, time format) are persistently saved locally using `shared_preferences`.
+* **Clean Architecture:** The codebase follows a scalable folder structure, neatly separating models, services, cubits, and UI components for maximum maintainability.
+
+## 🛠️ Tech Stack
+
+* **Framework:** [Flutter](https://flutter.dev/)
+* **Language:** [Dart](https://dart.dev/)
+* **State Management:** `flutter_bloc` (Cubit), `equatable`
+* **Networking:** `dio`, `pretty_dio_logger`
+* **Backend & Auth:** `firebase_core`, `firebase_auth`, `cloud_firestore`, `google_sign_in`, `flutter_facebook_auth`
+* **Location Services:** `geolocator`, `geocoding`
+* **UI Components & Styling:** `flutter_screenutil`, `skeletonizer`, `auto_size_text`
+* **Local Storage:** `shared_preferences`
