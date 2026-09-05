@@ -5,7 +5,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/features/weather/models/weather_data_model.dart';
-import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
 
 class CurrentWeatherCard extends StatelessWidget {
@@ -40,7 +39,7 @@ class CurrentWeatherCard extends StatelessWidget {
                   offset: Offset(0, 5),
                 ),
         ],
-        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+        border: isDark ? Border.all(color: Colors.white24) : null,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

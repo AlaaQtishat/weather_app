@@ -7,7 +7,6 @@ import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_cubit.dart';
 import 'package:weather_app/features/weather/cubit/weather_state.dart';
 import 'package:weather_app/features/weather/models/weather_data_model.dart';
-import 'package:weather_app/features/weather/models/weather_response_model.dart';
 import 'package:weather_app/features/weather/views/widgets/custom_error_widget.dart';
 import 'package:weather_app/features/weather/views/widgets/custom_skeletonizer.dart';
 import 'package:weather_app/features/weather/views/widgets/weather_content.dart';
@@ -91,65 +90,68 @@ class _HomeScreenState extends State<HomeScreen> {
             }
 
             if (locState is LocationLoaded) {
-              final weatherState = context.watch<WeatherCubit>().state;
-
-              if (weatherState is WeatherError) {
-                final cleanMessage = weatherState.errorMessage.replaceAll(
-                  'Exception: ',
-                  '',
-                );
-                return CustomErrorWidget(
-                  icon: Icons.cloud_off_rounded,
-                  title: "Oops! We couldn't fetch the weather.",
-                  message: cleanMessage,
-                  buttonText: "Try Again",
-                  onPressed: () {
-                    context.read<WeatherCubit>().fetchWeatherData(
-                      locState.lat,
-                      locState.lon,
+              return BlocBuilder<WeatherCubit, WeatherState>(
+                builder: (context, weatherState) {
+                  if (weatherState is WeatherError) {
+                    final cleanMessage = weatherState.errorMessage.replaceAll(
+                      'Exception: ',
+                      '',
                     );
-                  },
-                );
-              }
-              if (weatherState is WeatherLoading ||
-                  weatherState is WeatherInitial) {
-                return CustomSkeletonizer(
-                  child: WeatherContent(
-                    onForecastTap: () {},
-                    currentData: WeatherDataModel.dummy,
-                    todayData: WeatherDataModel.dummy,
-                    hourlyData: List.generate(
-                      5,
-                      (index) => WeatherDataModel.dummy,
+                    return CustomErrorWidget(
+                      icon: Icons.cloud_off_rounded,
+                      title: "Oops! We couldn't fetch the weather.",
+                      message: cleanMessage,
+                      buttonText: "Try Again",
+                      onPressed: () {
+                        context.read<WeatherCubit>().fetchWeatherData(
+                          locState.lat,
+                          locState.lon,
+                        );
+                      },
+                    );
+                  }
+
+                  if (weatherState is WeatherLoaded) {
+                    return WeatherContent(
+                      onForecastTap: () {
+                        context.read<NavigationCubit>().changeIndex(2);
+                      },
+                      onRefresh: () async {
+                        final currentLocState = context
+                            .read<LocationCubit>()
+                            .state;
+
+                        if (currentLocState is LocationLoaded) {
+                          await context.read<WeatherCubit>().fetchWeatherData(
+                            currentLocState.lat,
+                            currentLocState.lon,
+                          );
+                        } else {
+                          await context
+                              .read<LocationCubit>()
+                              .fetchUserLocation();
+                        }
+                      },
+                      currentData: weatherState.current.data.first,
+                      todayData: weatherState.daily.data.first,
+                      hourlyData: weatherState.hourly.data,
+                      isHomeScreen: true,
+                    );
+                  }
+                  return CustomSkeletonizer(
+                    child: WeatherContent(
+                      onForecastTap: () {},
+                      currentData: WeatherDataModel.dummy,
+                      todayData: WeatherDataModel.dummy,
+                      hourlyData: List.generate(
+                        5,
+                        (index) => WeatherDataModel.dummy,
+                      ),
+                      isHomeScreen: true,
                     ),
-                    isHomeScreen: true,
-                  ),
-                );
-              }
-
-              if (weatherState is WeatherLoaded) {
-                return WeatherContent(
-                  onForecastTap: () {
-                    context.read<NavigationCubit>().changeIndex(2);
-                  },
-                  onRefresh: () async {
-                    final currentLocState = context.read<LocationCubit>().state;
-
-                    if (currentLocState is LocationLoaded) {
-                      await context.read<WeatherCubit>().fetchWeatherData(
-                        currentLocState.lat,
-                        currentLocState.lon,
-                      );
-                    } else {
-                      await context.read<LocationCubit>().fetchUserLocation();
-                    }
-                  },
-                  currentData: weatherState.current.data.first,
-                  todayData: weatherState.daily.data.first,
-                  hourlyData: weatherState.hourly.data,
-                  isHomeScreen: true,
-                );
-              }
+                  );
+                },
+              );
             }
 
             return const SizedBox();
