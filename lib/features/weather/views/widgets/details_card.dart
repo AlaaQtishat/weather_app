@@ -33,7 +33,7 @@ class DetailsCard extends StatelessWidget {
                   offset: Offset(0, 3),
                 ),
         ],
-        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+        border: isDark ? Border.all(color: Colors.white24) : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,11 +52,7 @@ class DetailsCard extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: TextStyle(
-                  fontSize: 22.sp,
-                  fontWeight: FontWeight.bold,
-                  // color: AppTheme.primaryDarkBlue,
-                ),
+                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
               ),
               SizedBox(width: 8.w),
               Text(

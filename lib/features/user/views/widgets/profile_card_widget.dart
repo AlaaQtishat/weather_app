@@ -33,7 +33,7 @@ class ProfileCardWidget extends StatelessWidget {
                   offset: Offset(0, 5),
                 ),
         ],
-        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+        border: isDark ? Border.all(color: Colors.white24) : null,
       ),
       child: Column(children: children),
     );

@@ -5,10 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'package:weather_app/core/constants/app_theme.dart';
 import 'package:weather_app/core/utils/weather_assets.dart';
-import 'package:weather_app/features/main_layout/cubit/navigation_cubit.dart';
 import 'package:weather_app/features/weather/models/weather_data_model.dart';
-import 'package:weather_app/features/weather/models/weather_response_model.dart';
-import 'package:weather_app/features/weather/views/forecast_screen.dart';
 
 class HourlyWeatherList extends StatelessWidget {
   final List<WeatherDataModel> hourlyData;
@@ -140,7 +137,6 @@ class HourlyWeatherList extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 15.sp,
                         fontWeight: FontWeight.bold,
-                        // color: const Color(0xFF1E2432),
                       ),
                     ),
                     SizedBox(height: 2.h),

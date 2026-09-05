@@ -76,8 +76,8 @@ class WeatherContent extends StatelessWidget {
               SizedBox(height: 24.h),
 
               SunriseSunsetCard(
-                sunriseTimestamp: todayData.sunrise ?? currentData.sunrise ?? 0,
-                sunsetTimestamp: todayData.sunset ?? currentData.sunset ?? 0,
+                sunriseTimestamp: todayData.sunrise ?? 0,
+                sunsetTimestamp: todayData.sunset ?? 0,
               ),
 
               SizedBox(height: 24.h),

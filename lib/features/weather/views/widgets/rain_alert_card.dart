@@ -23,7 +23,7 @@ class RainAlertCard extends StatelessWidget {
                   offset: Offset(0, 5),
                 ),
         ],
-        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+        border: isDark ? Border.all(color: Colors.white24) : null,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
@@ -34,10 +34,7 @@ class RainAlertCard extends StatelessWidget {
             Expanded(
               child: RichText(
                 text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    //  color: AppTheme.primaryDarkBlue,
-                  ),
+                  style: TextStyle(fontSize: 13.sp),
                   children: [
                     TextSpan(
                       text: "Grab an umbrella. ",

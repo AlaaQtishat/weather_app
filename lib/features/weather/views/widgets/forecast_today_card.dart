@@ -43,7 +43,7 @@ class ForecastTodayCard extends StatelessWidget {
                   offset: Offset(0, 5),
                 ),
         ],
-        border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+        border: isDark ? Border.all(color: Colors.white24) : null,
       ),
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
       child: Row(

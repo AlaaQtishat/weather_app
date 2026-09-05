@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/core/app%20preferences/cubit/preferences_cubit.dart';
 import 'dart:math';
 import 'dart:async';
-
 import 'package:weather_app/core/constants/app_theme.dart';
 
 class SunriseSunsetCard extends StatefulWidget {
@@ -90,7 +89,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
                       offset: Offset(0, 5),
                     ),
             ],
-            border: isDark ? BoxBorder.all(color: Colors.white24) : Border(),
+            border: isDark ? Border.all(color: Colors.white24) : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,9 +136,9 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildTimeColumn("SUNRISE", timeFormat.format(sunrise)),
-                  _buildTimeColumn("NOW", timeFormat.format(now)),
-                  _buildTimeColumn("SUNSET", timeFormat.format(sunset)),
+                  buildTimeColumn("SUNRISE", timeFormat.format(sunrise)),
+                  buildTimeColumn("NOW", timeFormat.format(now)),
+                  buildTimeColumn("SUNSET", timeFormat.format(sunset)),
                 ],
               ),
             ],
@@ -149,7 +148,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
     );
   }
 
-  Widget _buildTimeColumn(String title, String time) {
+  Widget buildTimeColumn(String title, String time) {
     return Column(
       children: [
         Text(
@@ -163,11 +162,7 @@ class _SunriseSunsetCardState extends State<SunriseSunsetCard> {
         SizedBox(height: 4.h),
         Text(
           time,
-          style: TextStyle(
-            fontSize: 16.sp,
-            //   color: const Color(0xFF1E2432),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
         ),
       ],
     );
